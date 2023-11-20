@@ -1,2 +1,2 @@
 # Certification-prep
-Here will be cheetsheats for certifications I will take
+Here will be cheatsheets for certifications I will take
