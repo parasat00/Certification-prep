@@ -48,3 +48,31 @@ sudo vi /etc/modprobe.d/blacklist.conf          # to block kernel module from lo
 # SD cards prefixed like:  /dev/mmcblk0p1, /dev/mmcblk0p2, /dev/mmcblk1p1, /dev/mmcblk1p2.
 # NVme cards prefixed like: /dev/nvme0n1p1 and /dev/nvme0n1p2.
 ```
+
+### Boot the system
+Weight: 3
+
+``` bash
+# BIOS/UEFI >>> Bootloader >>> Kernel >>> Init
+
+# The most popular bootloader for Linux in the x86 architecture is GRUB (Grand Unified Bootloader)
+
+# The memory space where the kernel stores its messages, including the boot messages, is called the kernel ring buffer.
+
+dmesg                                       # Displays the current messages in the kernel ring buffer
+dmesg -H                                    # Same with dmesg command, but with pager (-H or --human can be used)
+dmesg --clear                               # Removes all messages from kernel ring buffer
+
+journalctl                                  # Shows the initialization messages
+journalctl --list-boots                     # Shows a list of boot numbers relative to the current boot (0 -current, -1 -previous, -2..)
+journalctl -b 0                             # Messages for the current boot will be shown
+
+# /var/log/journal/ is the default location for systemd log messages.
+
+journalctl -D /var/log/other_directory      # Will display logs from other_directory (-D or --directory can be used)
+
+# Initialization and other messages issued by the operating system are stored in files inside the directory /var/log/.
+
+
+
+```
