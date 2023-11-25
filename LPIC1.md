@@ -59,10 +59,10 @@ Weight: 3
 
 sudo vi /etc/default/grub                   # To edit/add/delete kernel parameters
 grub-mkconfig -o /boot/grub/grub.cfg        # To make changes persistent
-        or use
+        # or use
 update-grub                                 # Does the same
 
-
+sudo cat /proc/cmdline                      # To read the kernel parameters used for loading the current session
 
 # The memory space where the kernel stores its messages, including the boot messages, is called the kernel ring buffer.
 
