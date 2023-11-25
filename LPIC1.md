@@ -57,6 +57,13 @@ Weight: 3
 
 # The most popular bootloader for Linux in the x86 architecture is GRUB (Grand Unified Bootloader)
 
+sudo vi /etc/default/grub                   # To edit/add/delete kernel parameters
+grub-mkconfig -o /boot/grub/grub.cfg        # To make changes persistent
+        or use
+update-grub                                 # Does the same
+
+
+
 # The memory space where the kernel stores its messages, including the boot messages, is called the kernel ring buffer.
 
 dmesg                                       # Displays the current messages in the kernel ring buffer
