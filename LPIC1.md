@@ -11,6 +11,8 @@ Weight: 2
 ``` bash
 # Delete, F2 or F12 to enter configuration utility (BIOS, UEFI)
 
+sudo lsblk                                 # Lists block devices
+
 sudo lspci                                 # will show all of the devices connected to the Peripheral Component Interconnect (PCI) bus
 sudo lspci -s [hardware address] -v        # more detailed information (with kernel info) about a specific (-s) device. (-v or verbose)
 sudo lspci -s [hardware address] -k        # kernel information the specific (-s) device uses. (-k stands for kernel)
@@ -150,4 +152,85 @@ initctl list                                           # lists services, their c
 sudo start tty6                                        # starts the service named tty6
 sudo status tty6                                       # checks the status of the service named tty6
 sudo stop tty6                                         # stops the service named tty6
+```
+### Shutdown and Restart
+```bash
+shutdown [option] [time] [message]                     # sends message as a warning and shuts down machine at given time
+# time can be divided as hh:mm or +m (wait m minutes before shutdown) or now (+0)
+
+sudo systemctl reboot                                  # restarts the system
+sudo systemctl #poweroff                               # turns off the system
+
+sudo wall [text file/message]                          # sends a message to terminal sessions of all logged-in users
+```
+
+## Linux Installation and Package Management
+### Design hard disk layout
+
+ /media --- the default mount point for any user-removable media (e.g. external disks, USB flash drives, memory card readers, optical disks, etc.) connected to the system
+ USB flash drive with the label FlashDrive connected by the user john would be mounted under /media/john/FlashDrive/
+
+ Whenever you need to manually mount a filesystem, it is good practice to mount it under /mnt. 
+
+ The swap partition is used to swap memory pages from RAM to disk as needed.
+```bash
+swapon --show                                           # To check if the system uses any kind of swap areas
+
+sudo mkswap [partition f.e. /dev/vdb3]                  # To mark the partition as swap
+sudo swapon --verbose [partition f.e. /dev/vdb3]        # To swap on the system
+
+sudo swapoff [partition f.e. /dev/vdb3]                 # To stop using partition as swap
+
+You can also use file as swap:
+sudo dd if=/dev/zero of=/swap bs=1M count=2048 status=progress        # creates a file of the necessary size (2GB) filled with zeros
+# /dev/zero (basically infinite zeros) as an input file (if) and generates file named swap as an output file (of)
+# it basically repeats 1 megabyte (1M) of zeros 2048 times (which is 2Gb)
+
+sudo chmod 600 /swap                                                  # Give permission for only user to read and write in this file:
+sudo mkswap /swap
+sudo swapon --verbose /swap
+sudo swapon --show
+```
+
+LVM
+Logical Volume Management (LVM) is a form of storage virtualization that offers system administrators a more flexible approach to managing disk space than 
+traditional partitioning. 
+
+The basic unit is the Physical Volume (PV), which is a block device on your system like a disk partition or a RAID array.
+
+Several Physical Volumes (PV) form Volume Group (VG), Volume Group can have multiple Logical Volumes (LV)
+
+A Logical Volume will be created in /dev, named as /dev/VGNAME/LVNAME, where VGNAME is the name of the Volume Group, and LVNAME is the name of the Logical Volume.
+
+```bash
+sudo lvmdiskscan                                        # displays disks and partitions available
+
+# physical volume commands
+sudo pvdisplay                                                  # detailed info about physical volume
+sudo pvs                                                        # lists physical volumes in the system
+sudo pvcreate [filesystem1] [filesystem2]                       # creates physical volume(pv) from multiple filesystem f.e. /dev/sde, /dev/sdd
+                                                                # multiple pvs created if multiple filesystems given
+sudo pvremove [pv name]                                         # removes physical volume
+
+# volume group commands
+sudo vgdisplay                                                  # detailed info about volume groups
+sudo vgs                                                        # lists volume groups in the system
+sudo vgcreate [vg name] [vg name1] [pv name2]                   # creates a single volume group using one or multiple polumes groups
+sudo vgextend [vg name] [pv name3]                              # adds another physical volume to already existing volume group
+sudo vgreduce [vg name] [pv name]                               # deletes physical volume from volume group decreasing its size
+
+# lv commands
+sudo lvdisplay                                                  # detailed info about logical volume
+sudo lvs                                                        # lists logical volumes in the system
+sudo lvcreate --size [number]G --name [lv name] [vg name]       # creates logical volume with given size and name on a given volume group
+sudo lvresize --extents 100%VG [vg name]/[lv name]              # extends the size of logical volume to that of volume group
+sudo lvresize --size 2G [vg name]/[lv name]                     # resizes the volume of logical volume to 2GB
+sudo lvresize --size +2G [vg name]/[lv name]                    # adds an additional size of 2GB to the logical volume
+# -L — linear option, enables us to make use of multiple physical volumes if available in the volume group
+sudo lvresize -L +2G [vg name]/[lv name]                        # adds an additional size of 2GB to the logical volume from any given phyical volume
+
+sudo mkfs.xfs [path to lv]                                      # creates a file system on a given logical volume. path can be /dev/[vg name]/[lv name]
+sudo lvresize --resizefs --size 2G [vg name]/[lv name]          # resizes the sizes of both logical volume and file system to 2GB
+sudo resize2fs [path to lv]                                     # resizes the file of the file system to that of logical volume
+# FILE SYSTEM SIZE CAN ONLY BE INCREASED!!! YOU CAN NOT DECREASE THEM
 ```
