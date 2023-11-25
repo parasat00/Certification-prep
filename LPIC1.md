@@ -74,6 +74,7 @@ journalctl                                  # Shows the initialization messages
 journalctl --list-boots                     # Shows a list of boot numbers relative to the current boot (0 -current, -1 -previous, -2..)
 journalctl -b 0                             # Messages for the current boot will be shown
 
+# /var/log/  initialization and system logs
 # /var/log/journal/ is the default location for systemd log messages.
 
 journalctl -D /var/log/other_directory      # Will display logs from other_directory (-D or --directory can be used)
@@ -91,6 +92,11 @@ SysVinit runlevels:
 * Runlevel 2, 3 or 4 || Multi-user mode. Users can log in by console or network. Runlevels 2 and 4 are not often used.
 * Runlevel 5 || Multi-user mode. It is equivalent to 3, plus the graphical mode login.
 * Runlevel 6 || System restart.
+
+The program responsible for managing runlevels and associated daemons/resources is /sbin/init.
+
+/etc/inittab - defines each run level
+/etc/init.d  - Contains script for each runlevel
 
 The default runlevel — the one that will be chosen if no other is given as a kernel parameter.
 Defined in /etc/inittab, in the entry id:x:initdefault. This number should never be 0 or 6t
@@ -133,4 +139,15 @@ sudo systemctl list-units                              # lists active units or u
 systemctl suspend                                      # saves the current state of the system into the RAM and cuts the power supply of all devices except the RAM
 systemctl hibernate                                    # will copy all memory data to disk, so the current state of the system can be recovered after powering it off
 # both commands can only be used when there is no other power manager running in the system, like the acpid daemon
+```
+
+Upstart
+! Upstart was developed for the Ubuntu Linux distribution to help facilitate parallel startup of processes. Ubuntu has stopped using Upstart since 2015 when it switched from Upstart to systemd.
+
+The initialization scripts used by Upstart are located in the directory /etc/init/.
+```bash
+initctl list                                           # lists services, their current state and PID(if available)
+sudo start tty6                                        # starts the service named tty6
+sudo status tty6                                       # checks the status of the service named tty6
+sudo stop tty6                                         # stops the service named tty6
 ```
