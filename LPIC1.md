@@ -234,3 +234,47 @@ sudo lvresize --resizefs --size 2G [vg name]/[lv name]          # resizes the si
 sudo resize2fs [path to lv]                                     # resizes the file of the file system to that of logical volume
 # FILE SYSTEM SIZE CAN ONLY BE INCREASED!!! YOU CAN NOT DECREASE THEM
 ```
+### Debian package management
+```bash
+dpkg -i [package name]                                          # installs a package with .deb extension
+dpkg -r [package name]                                          # removes a package or packages (all other packages that depends on it should be deleted)
+dpkg -P [package name]                                          # removes a package with the files associated with it
+--force                                                         # You can forcefully install/delete package even if dependencies are not met
+                                                                # Do not use --force unless you are absolutely sure of what you are doing
+dpkg -I [package name]                                          # Gets detailed information about a .deb package
+dpkg --get-selections                                           # Lists every package installed in a system
+dpkg -L [package name]                                          # Lists every file installed by the given package
+dpkg-query -S [path to file]                                    # Displays a package that owns given file. Searches among installed packages
+dpkg-reconfigure [package name]                                 # Restore a package’s settings to its “fresh” state
+```
+### Advanced Package Tool (APT)
+APT provides features like advanced search capabilities and automatic dependency resolution.
+
+APT is not a “substitute” for dpkg. You may think of it as a “front end”, streamlining operations and filling gaps in dpkg functionality, like dependency resolution.
+
+```bash
+# apt-get   ----->        used to download, install, upgrade or remove packages from the system.
+apt-get update                                # Retrieves information about new update packages, recommended before installing or upgrading software
+apt-get upgrade                               # Automatically upgrades any installed packages to the latest versions available from the repositories
+apt-get upgrade [package name]                # Upgrades a single package
+
+apt-get install [package name]                # Installs package with all of its dependencies
+apt-get install -f                            # Installs the missing dependencies
+
+apt-get remove [package name]                 # Removes a package along with other packages that depend of the given package
+apt-get purge [package name]                  # Removes a package with its configuration files
+apt-get remove --purge [package name]         # Does the same as the previous command
+
+apt-get clean                                 # Removes all cache files needed for installing and upgrading packages
+
+
+# apt-cache ----->        used to perform operations, like searches, in the package index.
+apt-cache search [pattern]                    # Searches for a packages that contain pattern either in packeage name, description or files provided
+apt-cache show [package name]                 # Shows full information about the package
+
+# apt-file  ----->        used for searching for files inside packages.
+apt-get install apt-file                      # Installs apt-file
+apt-file update                               # Updates package cache used for apt-file (run after installation)
+apt-file list [package name]                  # Lists content of the file
+apt-file search [file name]                   # Provides which (both installed and uninstalled) package contains the given file
+```
