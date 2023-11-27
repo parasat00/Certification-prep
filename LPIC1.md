@@ -309,7 +309,7 @@ yum search [pattern]                          # Lists packages whose name or sum
 yum whatprovides [path to file]               # Retrieves a package name that provides for the given file
 yum info [package name]                       # Gives information about the package
 
-yum-config-manager --add-repo [URL to .repo file]        # adds repo
+yum-config-manager --add-repo [URL to .repo file]        # adds repo to /etc/yum.repos.d/
 # disabled repositories will be ignored when installing or upgrading software
 yum-config-manager --diable [repo id]         # disables repo
 yum-config-manager --enable [repo id]         # enables repo
@@ -318,4 +318,30 @@ yum-config-manager --enable [repo id]         # enables repo
 # Yum stores downloaded packages and associated metadata in a cache directory (usually /var/cache/yum)
 yum clean packages                            # cleans cache from packages
 yum clean metadata                            # cleans cache from metadata
+```
+
+### DNF
+dnf is the package management tool used on Fedora, and is a fork of yum. 
+```bash
+dnf install [package name]                    # Installs package
+dnf remove [package name]                     # Removes package
+dnf upgrade                                   # Upgrades all packages in the system
+dnf upgrade [package name]                    # Upgrades given package
+
+dnf search [pattern]                          # Lists packages whose name or description contain given pattern
+dnf info [package name]                       # Retireves detailed information about the package
+dnf provides [file]                           # Retrieves a package that provides this file
+dnf list --installed                          # Lists all installed packages
+dnf repoquery -l [package name]               # Lists files inside package
+
+dnf help [command]                            # Displays more information/parameters for the given command
+
+dnf repolist                                  # Lists available packages
+dnf repolist --enabled                        # Lists enabled packages
+dnf repolist --disabled                       # Lists diabled packages
+
+dnf config-manager --add-repo [url]           # Adds repository to /etc/yum.repos.d/
+# Added repositories are enabled by default.
+dnf config-manager --set-enabled [repo id]    # Enables repository
+dnf config-manager --set-disabled [repo id]   # Disables repository
 ```
