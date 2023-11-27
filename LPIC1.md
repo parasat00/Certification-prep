@@ -269,7 +269,7 @@ apt-get clean                                 # Removes all cache files needed f
 
 
 # apt-cache ----->        used to perform operations, like searches, in the package index.
-apt-cache search [pattern]                    # Searches for a packages that contain pattern either in packeage name, description or files provided
+apt-cache search [pattern]                    # Searches for a packages that contain pattern either in package name, description or files provided
 apt-cache show [package name]                 # Shows full information about the package
 
 # apt-file  ----->        used for searching for files inside packages.
@@ -277,4 +277,45 @@ apt-get install apt-file                      # Installs apt-file
 apt-file update                               # Updates package cache used for apt-file (run after installation)
 apt-file list [package name]                  # Lists content of the file
 apt-file search [file name]                   # Provides which (both installed and uninstalled) package contains the given file
+```
+
+### RPM Package Manager
+The RPM Package Manager (rpm) is the essential tool for managing software packages on Red Hat-based (or derived) systems.
+```bash
+rpm -i [package name]                         # Installs a package
+rpm -ivh [package name]                       # Installs a package(v-verbose, more info; h-prints # signs to aid visualisation)
+rpm -U [package name]                         # Upgrades previous version of package to newer version
+rpm -e [package name]                         # Removes installed package, remove dependent packages first or error rises
+
+rpm -qa                                       # Lists all installed packages(qa-query all)
+rpm -qf [path to the file]                    # Retrieves package that owns the file(qf-query file)
+rpm -qi [package name]                        # Retrieves information about the installed package(qi-query info)
+rpm -ql [package name]                        # Lists files inside installed package(ql-query list)
+rpm -qip [package name]                       # Retrieves information about the package that hasnt been installed yet
+rpm -qlp [package name]                       # Lists files inside the package that hasnt been installed yet
+```
+
+### YUM (YellowDog Updater Modified) Package Manager
+```bash
+yum install [package name]                    # Installs a package
+yum remove [package name]                     # Removes a package
+yum update                                    # Updates every package available for update
+yum update [package name]                     # Updates a package
+yum check-update                              # Checks for update for every installed package
+yum check-update [package name]               # Checks if update is available for package
+
+yum repolist all                              # Lists available repositories
+yum search [pattern]                          # Lists packages whose name or summary contain the search pattern
+yum whatprovides [path to file]               # Retrieves a package name that provides for the given file
+yum info [package name]                       # Gives information about the package
+
+yum-config-manager --add-repo [URL to .repo file]        # adds repo
+# disabled repositories will be ignored when installing or upgrading software
+yum-config-manager --diable [repo id]         # disables repo
+yum-config-manager --enable [repo id]         # enables repo
+# get repo id from repolist all command, use only the part before the first / (f.e. updates from updates/7/x86_64)
+
+# Yum stores downloaded packages and associated metadata in a cache directory (usually /var/cache/yum)
+yum clean packages                            # cleans cache from packages
+yum clean metadata                            # cleans cache from metadata
 ```
