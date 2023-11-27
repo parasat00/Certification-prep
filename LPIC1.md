@@ -345,3 +345,33 @@ dnf config-manager --add-repo [url]           # Adds repository to /etc/yum.repo
 dnf config-manager --set-enabled [repo id]    # Enables repository
 dnf config-manager --set-disabled [repo id]   # Disables repository
 ```
+
+### Zypper
+zypper is the package management tool used on SUSE Linux and OpenSUSE. 
+```bash
+zypper in [package name]                      # Installs a package (can also use install)
+zypper in [path to a package]                 # Installs a package on a disk
+zypper rm [package name]                      # Removes a package (can also use remove)
+
+zypper refresh                                # Refreshes repo metadata
+zypper update                                 # Updates installed packages
+zypper list-updates                           # Lists updates without updating
+
+zypper se [package name]                      # Searches for a package (can also use search)
+zypper se -i                                  # Lists all installed packages
+zypper se -i [package name]                   # Searches for a package among installed ones
+zypper se -u [package name]                   # Searches for a package among non-installed ones
+zypper se --provides [file]                   # Shows which package provides this file
+
+zypper info [package name]                    # Returns information about package
+zypper repos                                  # Lists repositories currently registered in your system
+
+zypper modifyrepo -e [repo alias]             # Enables package (use alias from repos command)
+zypper modifyrepo -d [repo alias]             # Disables package
+zypper modifyrepo -f [repo alias]             # Enables auto-refresh for te given package
+zypper modifyrepo -F [repo alias]             # Disables auto-refresh for the given package
+
+zypper addrepo [repo URL] [repo alias]        # Adds repository to the list
+# Added repositories are enabled by default
+zypper removerepo [repo alias]                # Removes repository from the list
+```
