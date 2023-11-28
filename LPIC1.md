@@ -3,6 +3,24 @@
 _**Note:**_ This document is not completed.  
 This is my personal **lpic1** cheatsheet.
 
+## GNU and Unix Commands
+
+### Work on the command line
+Weight: 4
+
+```bash
+ls -a                              # Lists all files(hidden included)
+pwd                                # Prints the present working directory
+touch [file name]                  # Creates file with given name
+uname -a                           # Prints the  Linux kernel version, distribution and release
+man [command]                      # Accesses help files documenting command usage
+apropos [keyword]                  # Helps to find command by keyword using its man pages
+type [command]                     # Prints type and absolute path of one or more command
+which [command]                    # Prints absolute path of a command
+history                            # Prints previously used commands
+# .bash_history is a hidden file that stores user's previously used command (inside user's home dir)
+```
+
 ## System Architecture
 
 ### Determine and Configure Hardware Settings 
