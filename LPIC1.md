@@ -208,14 +208,14 @@ sudo lvmdiskscan                                        # displays disks and par
 # physical volume commands
 sudo pvdisplay                                                  # detailed info about physical volume
 sudo pvs                                                        # lists physical volumes in the system
-sudo pvcreate [filesystem1] [filesystem2]                       # creates physical volume(pv) from multiple filesystem f.e. /dev/sde, /dev/sdd
+sudo pvcreate [filesystem1] [filesystem2]                       # creates physical volumes (pv) from multiple filesystems f.e. /dev/sde, /dev/sdd
                                                                 # multiple pvs created if multiple filesystems given
 sudo pvremove [pv name]                                         # removes physical volume
 
 # volume group commands
 sudo vgdisplay                                                  # detailed info about volume groups
 sudo vgs                                                        # lists volume groups in the system
-sudo vgcreate [vg name] [vg name1] [pv name2]                   # creates a single volume group using one or multiple polumes groups
+sudo vgcreate [vg name] [pv name1] [pv name2]                   # creates a single volume group using one or multiple volume groups
 sudo vgextend [vg name] [pv name3]                              # adds another physical volume to already existing volume group
 sudo vgreduce [vg name] [pv name]                               # deletes physical volume from volume group decreasing its size
 
@@ -238,7 +238,7 @@ sudo resize2fs [path to lv]                                     # resizes the fi
 ```bash
 dpkg -i [package name]                                          # installs a package with .deb extension
 dpkg -r [package name]                                          # removes a package or packages (all other packages that depends on it should be deleted)
-dpkg -P [package name]                                          # removes a package with the files associated with it
+dpkg -P [package name]                                          # removes a package with the files associated with it (purge)
 --force                                                         # You can forcefully install/delete package even if dependencies are not met
                                                                 # Do not use --force unless you are absolutely sure of what you are doing
 dpkg -I [package name]                                          # Gets detailed information about a .deb package
@@ -308,16 +308,17 @@ yum repolist all                              # Lists available repositories
 yum search [pattern]                          # Lists packages whose name or summary contain the search pattern
 yum whatprovides [path to file]               # Retrieves a package name that provides for the given file
 yum info [package name]                       # Gives information about the package
+repoquery -l [package name]                   # Lists files inside package
 
 yum-config-manager --add-repo [URL to .repo file]        # adds repo to /etc/yum.repos.d/
 # disabled repositories will be ignored when installing or upgrading software
-yum-config-manager --diable [repo id]         # disables repo
+yum-config-manager --disable [repo id]        # disables repo
 yum-config-manager --enable [repo id]         # enables repo
 # get repo id from repolist all command, use only the part before the first / (f.e. updates from updates/7/x86_64)
 
 # Yum stores downloaded packages and associated metadata in a cache directory (usually /var/cache/yum)
 yum clean packages                            # cleans cache from packages
-yum clean metadata                            # cleans cache from metadata
+yum clean metadata                            # cleans cache from metadata (or use 'all' to clean all)
 ```
 
 ### DNF
