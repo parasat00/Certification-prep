@@ -19,6 +19,31 @@ type [command]                     # Prints type and absolute path of one or mor
 which [command]                    # Prints absolute path of a command
 history                            # Prints previously used commands
 # .bash_history is a hidden file that stores user's previously used command (inside user's home dir)
+
+env                                # Prints current environmental variables
+set                                # Prints all environmental variables (local too)
+echo [string]                      # Prints string
+echo $[variable]                   # Prints a variable
+
+[variable]=[value]                 # Creating a new variable and assigning a value
+export [varable]=[value]           # Creates a new variable, variable can be passed to child shells
+unset [variable]                   # Deletes a variable
+
+bash                               # Opens a new child shell
+exit                               # Exits a shell
+
+# Dealing with special characters
+#        Special characters:         & ; | * ? " ' [ ] ( ) $ < > { } # / \ ! ~.
+touch my big file                  # Creates a three files
+touch "my big file"                # Creates one file 'my big file'
+touch 'my big file'                # Creates one file 'my big file'
+touch my\ big\ file                # Creates one file 'my big file'
+# backslash("\") will “escape” the specialness of the character
+
+# Single quotes will preserve the literal value of all characters
+# While double quotes will preserve all characters except for $, `, \ and, in certain cases, !
+echo "$PATH"                       # Prints Path variable
+echo '$PATH'                       # Prints '$PATH'
 ```
 
 ## System Architecture
