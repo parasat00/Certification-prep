@@ -48,6 +48,55 @@ touch my\ big\ file                # Creates one file 'my big file'
 # While double quotes will preserve all characters except for $, `, \ and, in certain cases, !
 echo "$PATH"                       # Prints Path variable
 echo '$PATH'                       # Prints '$PATH'
+
+cat [file]                         # Prints content
+cat > [file]                       # Rewrites content
+cat >> [file]                      # Appends text to content of file
+
+grep [word] [file]                 # Prints only lines that contain word
+grep -i [word] [file]              # The same as before but case insensitive
+grep -v [word] [file]              # Prints everything but not the lines that contain word
+
+cat [file] | grep [word]           # The same with (grep [word] [file])
+#   pipeline (|) -- takes output of one command as an input for second
+
+cut -d [delimeter] -f [number] [file]      # Cuts given field of the content
+# F.e. cut -d ':' -f 1 [file] ----> outputs first colon of the file each column separated by :
+
+uniq [file]                        # Does not print the line if the line is the same as the previous
+sort [file]                        # Sorts the content
+
+sort [file] | uniq                 # Removes duplicate values from file
+
+diff [file1] [file2]               # Prints differences between two files
+diff -c [file1] [file2]            # The same as previous but with more context
+diff -y [file1] [file2]            # Prints content of two files line by line, marking different lines
+sdiff [file1] [file2]              # The same with the previous
+
+gzip [file]                        # Compresses (reduces size) a [file]
+                                   # It actually creates compressed version of the file and then deletes original
+zcat [file]                        # Prints content of the compressed file
+#bzcat for bzip, zcat for gzip, xzcat for xz compressed files
+gunzip [file]                      # Decompresses a file
+
+less [file]                        # Shows content of the file in the pager (useful for big files)
+head [file]                        # Prints first 10 lines of file
+tail [file]                        # Prints last 10 lines of file
+head -n 5 [file]                   # Prints first 5 lines of file
+head [file] | nl                   # Prints first 10 lines of file with the number of line
+head [file] | wc                   # Prints number of words in the first ten lines of file (wc -- word count)
+head [file] | wc -l                # Prints number of lines
+
+# Stream editor sed (previews without changing the file)
+sed 's/[first word]/[second word]/g' [file]    # Swaps (s) every occurence of first word with the second word
+                                               # g means globally, at every line at every occurence
+sed -i 's/[first word]/[second word]/g' [file] # Swaps every first word with second word and saves output to original file
+sed -i.backup 's/[first word]/[second word]/g' [file] # Swaps every first word with second word and saves output to file with name
+                                                                                              # (original file name + .backup )
+
+sed -n /[word]/p [file]            # Lists only the lines containing the word (-n means dont print unless; p - print)
+sed /[word]/d [file]               # Lists every line not containing word (d--delete)
+
 ```
 
 ## System Architecture
