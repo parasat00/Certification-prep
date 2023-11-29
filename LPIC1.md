@@ -30,6 +30,8 @@ echo $[variable]                   # Prints a variable
 [variable]=[value]                 # Creating a new variable and assigning a value
 export [varable]=[value]           # Creates a new variable, variable can be passed to child shells
 unset [variable]                   # Deletes a variable
+# These environmental variables will not be saved on reboot, to save it use:
+echo 'export [variable]=[value]' >> $HOME/.profile      # (or ~/.pam_environment)
 
 bash                               # Opens a new child shell
 exit                               # Exits a shell
