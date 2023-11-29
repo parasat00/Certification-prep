@@ -14,6 +14,8 @@ pwd                                # Prints the present working directory
 touch [file name]                  # Creates file with given name
 uname -a                           # Prints the  Linux kernel version, distribution and release
 man [command]                      # Accesses help files documenting command usage
+mandb                              # Updates the database for apropos
+                                   # Otherwise, apropos will not have any results to return.
 apropos [keyword]                  # Helps to find command by keyword using its man pages
 type [command]                     # Prints type and absolute path of one or more command
 which [command]                    # Prints absolute path of a command
