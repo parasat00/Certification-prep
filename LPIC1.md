@@ -9,7 +9,40 @@ Weight: 4
 
 Everything in Linux is a file, so knowing how to manipulate them is very important.
 ```bash
+ls                                 # Lists files and directories
+ls -a                              # Lists all files and directories including hidden files
+ls -l                              # Lists file or directory permissions, owner, size, modified date, time and name
+ls -lh                             # Similar to previous command, -h shows file sizes in a human readable format
+ls -R [dir]                        # Lists content of dir with its subdirectories and files
 
+tree [dir]                         # Displays content of dir with its subdirectories and files in tree like manner
+
+touch [file]                       # Creates an empty file(s)
+
+cp [source file] [dir]             # Copies source file inside dir. Both can be specified as absolute or relative paths
+cp -r [source] [destination]       # Copies source directory inside destinstion directory
+mv [file] [dir]                    # Moves(copies and deletes original) file inside dir
+mv [before] [after]                # Can also be used to rename a file
+mv -i [before] [after]             # Will ask user's permission before overwrite
+mv -f [before] [after]             # Will forcefully overwrite file without user's permission
+
+rm [file]                          # Removes file(s)
+rm -i [file]                       # Asks to confirm before deleting file
+rm -f [file]                       # Will forcefully deletes file without user's confirmation
+rm -r [dir]                        # Deletes directory and everything inside of it
+
+mkdir [dir]                        # Creates directory (or directories) inside user's current directory
+mkdir -p [parent]/[child]          # Creates both parent and child directory. Child created inside parent
+
+rmdir dir                          # Removes directory (or directories) ONLY IF DIR IS EMPTY
+rmdir -p [parent]/[child]          # Removes both parent and child ONLY IF BOTH ARE EMPTY
+
+# Wildcards are essentially symbols which may be used to substitute for one or more characters.
+# Types of Wildcards:
+#  * (asterisk)     --which represents zero, one or more occurrences of any character.
+#  ? (question mark)  --which represents a single occurrence of any character.
+#  [ ] (bracketed characters) --which represents any occurrence of the character(s) enclosed in the square brackets.
+#                               For example, the expression [0-9] matches all digits.
 ```
 
 ### Work on the command line
@@ -60,6 +93,7 @@ Process text streams using filters
 Weight: 2
 ```bash
 cat [file]                         # Prints content
+tac [file]                         # Prints lines in reverse order
 cat > [file]                       # Rewrites content
 cat >> [file]                      # Appends text to content of file
 
