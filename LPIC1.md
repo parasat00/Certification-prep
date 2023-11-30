@@ -48,7 +48,10 @@ touch my\ big\ file                # Creates one file 'my big file'
 # While double quotes will preserve all characters except for $, `, \ and, in certain cases, !
 echo "$PATH"                       # Prints Path variable
 echo '$PATH'                       # Prints '$PATH'
-
+```
+Process text streams using filters
+Weight: 2
+```bash
 cat [file]                         # Prints content
 cat > [file]                       # Rewrites content
 cat >> [file]                      # Appends text to content of file
@@ -97,6 +100,21 @@ sed -i.backup 's/[first word]/[second word]/g' [file] # Swaps every first word w
 sed -n /[word]/p [file]            # Lists only the lines containing the word (-n means dont print unless; p - print)
 sed /[word]/d [file]               # Lists every line not containing word (d--delete)
 
+# Ensuring Data Integrity
+
+#  Cryptographic hash function like md5sum, sha256sum and sha512sum are used to calculate checksum values
+sha256sum [file]                   # Calculates checksum value of the file
+sha256sum [file] > [textfile]      # Calculate checksum and store it inside textfile
+sha256sum -c [textfile]            # Verifies the integrity of the file
+# If the file is bad or corrupted it will ouput computed checksum did NOT match warning message. Lets test it:
+echo "some text" >> [file]         # We changed original file
+sha256sum -c [textfile]            # Outputs: ftu.txt: FAILED; sha256sum: WARNING: 1 computed checksum did NOT match
+
+# Octal Dump (od)
+od [file]                          # Outputs a content of the file in octal format
+od -x [file]                       # Outputs a content of the file in hexadecimal format
+od -c [file]                       # Outputs all characters (hidden too \n) in file
+od -An -c [file]                   # Outputs all characters of the file without byte offset
 ```
 
 ## System Architecture
