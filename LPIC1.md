@@ -4,6 +4,13 @@ _**Note:**_ This document is not completed.
 This is my personal **lpic1** cheatsheet.
 
 ## GNU and Unix Commands
+### Perform basic file management
+Weight: 4
+
+Everything in Linux is a file, so knowing how to manipulate them is very important.
+```bash
+
+```
 
 ### Work on the command line
 Weight: 4
@@ -115,6 +122,12 @@ od [file]                          # Outputs a content of the file in octal form
 od -x [file]                       # Outputs a content of the file in hexadecimal format
 od -c [file]                       # Outputs all characters (hidden too \n) in file
 od -An -c [file]                   # Outputs all characters of the file without byte offset
+
+split -l [number] -d [file] [prefix]    # Splits a file into several files (original unchanged)
+# -l [number] --> each file will contain [number] lines || -d --> tells split to number files like [prefix]00,[prefix]01,etc.
+
+paste -d, [file1] [file2]          # joins files horizontally (parallel merging) separated by ,
+# joins files by outputting lines consisting of lines from each file specified, separated by tab as delimiter(by default)
 ```
 
 ## System Architecture
