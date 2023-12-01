@@ -73,6 +73,40 @@ find . -name '*.conf' -exec chmod 644 '{}' \;    # Finds .conf files in the curr
 find . -type f -exec grep "lpi" '{}' \; -print   # Prints files containing word "lpi" in current directory
 find . -name '*.bak' -delete                     # Deletes all files which name end with 'bak'
 
+Archiving Files############################################################################################
+
+# Tar operations:
+# -c (or --create; creates archive); -x (or --extract; extract archive); -t (or --list; lists file inside archive)
+
+# Tar options
+# -v (or --verbose; shows progress in terminal);  -f (or --file; specifies archive name) 
+
+tar -cvf [archive name].tar [file(s)]      # Creates an archive from file(s) or directory
+
+tar -xvf [archive name].tar                 # Extracts content of archive to the current directory
+tar -xvf [archive name].tar -C [directory]  # Extracts archive inside specified directory
+
+
+# gzip compression is faster but compressed file size are bigger
+# bzip2 compresses slower but compressed file takes less size
+
+# To compress a file:
+gzip [file]                                 # Compresses with gzip
+bzip2 [file]                                # Compresses with bzip2
+
+# To decompress a file
+gunzip [file]                               # Decompresses with gzip
+bunzip2 [file]                              # Decompresses with bunzip2
+
+# For compression with tar:   -z   ---gzip;       -j  ---bzip2
+
+tar -czvf [archive name].tar.gz [file(s)]   # Creates an archive and compresses it with gzip
+tar -cjvf [archive name].tar.bz [file(s)]   # Creates an archive and compresses it with bzip2
+
+# To decompress just swap -c with -x:
+tar -xzvf [archive name].tar.gz             # Decompresses with gzip
+tar -xjvf [archive name].tar.bz             # Decompresses with bzip2
+
 
 
 
