@@ -108,8 +108,22 @@ tar -xzvf [archive name].tar.gz             # Decompresses with gzip
 tar -xjvf [archive name].tar.bz             # Decompresses with bzip2
 
 
+# CPIO (copy in, copy out) used to process archive files such as *.cpio or *.tar files.
+
+#It takes the list of files from the standard input (mostly output from ls)
+ls | cpio -o > [archive name].cpio          # Creates an archive
+# -o stands for output; create an ouput and redirect it into archive file
+
+cpio -id < [archive name].cpio              # Extracts an archive
+# -i  ---to perform the extract; -d  ---create the destination folder
 
 
+# dd command used to copy data from one location to another
+
+dd if=[file name] of=[copy name]             # Copies content of input file(if) into output file(of)
+dd if=[file name] of=[copy name] status=progress       # Does the same; Progress is shown
+
+dd if=[file name] of=[copy name] conv=ucase  # Copies content and capitalizes all of the text
 ```
 
 ### Work on the command line
