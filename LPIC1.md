@@ -43,6 +43,39 @@ rmdir -p [parent]/[child]          # Removes both parent and child ONLY IF BOTH 
 #  ? (question mark)  --which represents a single occurrence of any character.
 #  [ ] (bracketed characters) --which represents any occurrence of the character(s) enclosed in the square brackets.
 #                               For example, the expression [0-9] matches all digits.
+
+# Find Files
+find [start path] [option] [expression]    # Finds any file(s) starting from given directory that match expression
+      find . -name '*.pdf'                 # Finds pdf files in a current directory
+
+#      -type:
+#              f ---> searches among files    f.e.     find . -type f -name "example"
+#              d ---> searches among directory      f.e.     find . -type d -name "example"
+#              l ---> searches among symbolic links        f.e.     find . -type l -name "example"
+#      -name   --->  search based on the given name
+#      -iname  --->  search based on the given name case insensitive (myFile=MYFile)
+#      -not    --->  returns those results that do not match the test case
+#      -maxdepth N   --->  searches the given directory as well as subdirectories N levels deep
+#      -mtime        --->  searches based on when the file was modified (days)
+#      -size   --->  searches based on file size. F.e.:
+
+        find . -name '*.pdf' -size 100b     # Finds any pdf files with size exactly 100 bytes
+        find . -name '*.pdf' -size +100k    # Finds any pdf files larger than 100 killobyes
+        find . -name '*.pdf' -size -100M    # Finds any pdf files smaller than 100 megabytes
+        find . -size 0b                     # Finds empty files
+        find . --empty                      # Finds empty files
+
+#  -exec ---> allows to perform an action on resulting set. F.e.
+
+#    '{}' ---> placeholder for the find match results;   \; ---> terminates exec command
+
+find . -name '*.conf' -exec chmod 644 '{}' \;    # Finds .conf files in the current directory, changes their permissions
+find . -type f -exec grep "lpi" '{}' \; -print   # Prints files containing word "lpi" in current directory
+find . -name '*.bak' -delete                     # Deletes all files which name end with 'bak'
+
+
+
+
 ```
 
 ### Work on the command line
