@@ -126,6 +126,51 @@ dd if=[file name] of=[copy name] status=progress       # Does the same; Progress
 dd if=[file name] of=[copy name] conv=ucase  # Copies content and capitalizes all of the text
 ```
 
+### Use streams, pipes and redirects
+Weight: 4
+Standard Linux processes have three communication channels opened by default: the standard input channel (most times simply called stdin), the standard output channel (stdout) and the standard error channel (stderr). 
+
+The numerical file descriptors assigned to these channels are 0 to stdin, 1 to stdout and 2 to stderr. Communication channels are also accessible through the special devices /dev/stdin, /dev/stdout and /dev/stderr.
+
+```bash
+cat /etc/ > [file]                        # Overwrites stdout to a file
+cat /etc/ 1> [file]                       # Does the same as previous command
+
+cat /etc/ >> [file]                       # Appends stdout output to a file
+
+cat /etc/ 2> [file]                       # Overwrites stderr to a file
+
+wc -c < [file]                            # Redirects content of file as input wc command
+wc -c 0< [file]                           # Does the same
+
+grep -r '^The' /etc/ &> [file]            # Both stdout and stderr are written to file
+grep -r '^The' /etc/ > [file] 2>&1        # Does the same
+
+# Files are overwritten by output redirects unless Bash option noclobber is enabled
+# noclobber works means > doesnt work; >> works;
+set -o noclobber                          # Enables noclobber 
+set -C                                    # Does the same
+
+set +o noclobber                          # Disables noclobber 
+set +C                                    # Does the same
+
+# Here Document
+# The Here document redirect allows to type multi-line text that will be used as the redirected content. 
+# << indicate Here doc
+
+# The insertion mode will finish as soon as a line containing only the ending term is entered.
+wc -c <<EOF                              # Passes lines of text until EOF line as redirect file
+> Kiki do you love me?
+> Hahaha
+> EOF
+28
+
+# Here String
+# The Here string method is much like the Here document method, but for one line only
+wc -c <<<"How many characters in Here String?"   # MUST BE INSIDE QUOTES      
+36
+```
+
 ### Work on the command line
 Weight: 4
 
