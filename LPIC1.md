@@ -169,6 +169,33 @@ wc -c <<EOF                              # Passes lines of text until EOF line a
 # The Here string method is much like the Here document method, but for one line only
 wc -c <<<"How many characters in Here String?"   # MUST BE INSIDE QUOTES      
 36
+
+# Piping
+# -to pass on output from one program as an input to the second program
+
+cat /proc/cpuinfo | wc            # Pass the content of file as input for word counter
+# cat  ---to redirect an output to a file and content not shown on screen
+# tee  ---to redirect an output to a file and still see it on the screen
+[some command] | tee [file name]     # works like redirect
+[some command] | tee -a [file name]  # appends text to the end of file
+
+# Only the standard output of a process is captured by a pipe.
+# stderr needs to be redirected to stdout then to it can be stdin
+make 2>&1 | tee [file name]          # Both stderr and stdout redirected to file
+
+# Command substitution
+mkdir `date +%Y-%m-%d`               # Date outputs current date and its then used as name
+mkdir $(date +%Y-%m-%d)              # Does the same as previous command
+
+# The output of a command can be stored in variable
+OS=`uname -o`                        # Stores the output of command
+echo $OS                             # Output: GNU/Linux
+
+# xargs - an intermediate that employs the output of a program as the argument of another program
+xargs -I IMG convert IMG -resize 25% [file]/IMG < inputNames.txt
+# -I declares every entry from inputNames as IMG
+# As a result 'convert IMG -resize 25% [file]/IMG' runs for every entry in inputNames
+
 ```
 
 ### Work on the command line
