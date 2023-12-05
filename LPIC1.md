@@ -690,3 +690,85 @@ zypper addrepo [repo URL] [repo alias]        # Adds repository to the list
 # Added repositories are enabled by default
 zypper removerepo [repo alias]                # Removes repository from the list
 ```
+
+### Create, monitor and kill processes
+Weight: 4
+
+A process or task is an instance of a running program.
+Jobs are processes that have been started interactively through a terminal, sent to the background and have not yet finished execution.
+```bash
+jobs                         # Lists active jobs (and their status) in your Linux system
+jobs -l                      # The same output +it will show process id (pid) of a job
+jobs -n                      # Lists only processes that have changed status since the last notification
+jobs -p                      # Lists only process ids (pid)s
+jobs -r                      # Lists only running jobs
+jobs -s                      # Lists only stopped(suspended) jobs
+
+job %[job id]                # Displays specific job
+job %[string]                # Lists jobs whose command starts with the given string
+job %?[string]               # Jobs whose command contains given string
+job %+                       # Current job(last started in the background/suspended from the foreground)
+job %%                       # Does the same as previous command
+job %-                       # Displays the job that was %+ before the current one
+
+fg %[job id]                 # Take the job to the foreground/makes it current job
+bg %[job id]                 # Take the job to the background
+kill %[job id/pid]           # Terminates a job by its job id or pid
+
+pgrep [name]                 # Displays pid of process by its name
+pidof [name]                 # Displays pid of process by its name
+
+pkill [name]                 # Kills process by it name
+
+[command] &                  # Starts the command in a background f.e: cat 60 &
+
+nohup [command] &            # Detaches command from current session/Command runs even after session closed
+# nohup.out ---is the default file where stdout and stderr of nohup command will be saved
+nohup [command] > [file] &   # Specify where to store output of nohup command
+
+watch                        # Executes a program periodically (2 seconds by default)
+watch -n [x]                 # Executes a program every x seconds
+watch uptime                 # To monitor load average changes over time
+watch free                   # To monitor changes in memory use over time
+
+top                          # Process monitoring tool(works dynamically)
+# top sorts the percentage of CPU time used by each process in descending order by default
+# M      --Sort by memory usage.
+# N      --Sort by process ID number.
+# T      --Sort by running time.
+# P      --Sort by percentage of CPU usage.
+# R      --To switch between descending/ascending order.
+
+# other keys to interact with top:
+# ? or h      --Help.
+# k           --Kill a process. enter PID of the process to be killed 
+# r           --Change the priority (renice). Enter the nice value.Possible values range from -20 through 19
+              # Only the superuser can set a negative or lower than the current one value. 
+# u           --List processes from a particular user (by default processes from all users are shown).
+# c           --Show programs' absolute paths 
+# V           --Forest/hierarchy view of processes.
+# t and m     --Change the look of CPU and memory readings respectively in a four-stage cycle:
+            # the first two presses show progress bars, the third hides the bar and the fourth brings it back.
+# W           --Save configuration settings to ~/.toprc
+
+htop          # Fancier and more user-friendly version of top
+atop          # version of top with more info
+
+ps            # Shows a snapshot of processes statically
+ps a          # Shows all processes with a terminal (tty)
+
+# ps can accept options in three different styles: BSD, UNIX and GNU
+# p --displays info about particular process
+ps p [pid]    # BSD. Options do not follow any dash
+ps -p [pid]   # UNIX. Options follow single dash
+ps --p [pid]  # GNU. Options follow double dash
+
+ps U [user]   # Displays processes started by user. BSD style
+ps -u [user]  # The same command but in UNIX style
+ps --u [user] # The same command but in GNU style
+
+ps aux        # Displays processes from all shells (not only current shell) are shown
+            # a      --Show processes that are attached to a tty or terminal.
+            # u      --Display user-oriented format.
+            # x      --Show processes that are not attached to a tty or terminal.
+```
