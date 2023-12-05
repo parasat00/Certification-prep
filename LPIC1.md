@@ -719,6 +719,7 @@ pgrep [name]                 # Displays pid of process by its name
 pidof [name]                 # Displays pid of process by its name
 
 pkill [name]                 # Kills process by it name
+killall [name]               # Kills all processes under given name
 
 [command] &                  # Starts the command in a background f.e: cat 60 &
 
