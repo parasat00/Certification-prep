@@ -788,7 +788,7 @@ Ctrl+a+A    # Sets a title for window
 Ctrl+a+n    # Go to the next window
 Ctrl+a+p    # Go to the previous window
 Ctrl+a+[number]   # Go to specified window
-Ctrl+a+\"    # Lists windows. Select one you want to enter
+Ctrl+a+"    # Lists windows. Select one you want to enter"
 
 Ctrl+a+k    # Kills a window you are in
 
