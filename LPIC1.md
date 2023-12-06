@@ -772,4 +772,117 @@ ps aux        # Displays processes from all shells (not only current shell) are 
             # a      --Show processes that are attached to a tty or terminal.
             # u      --Display user-oriented format.
             # x      --Show processes that are not attached to a tty or terminal.
+
+# GNU & tmux#####################################################################################
+
+# GNU Screen
+screen      # Invoke GNU screen, first window and session are created
+screen -t [title]      # Creates a new window with title
+
+Ctrl+a      # Screen's prefix
+Ctrl+a+w    # Shows all windows
+Ctrl+a+c    # Creates new window
+Ctrl+a+A    # Sets a title for window
+
+# You can move between windows
+Ctrl+a+n    # Go to the next window
+Ctrl+a+p    # Go to the previous window
+Ctrl+a+[number]   # Go to specified window
+Ctrl+a+"    # Lists windows. Select one you want to enter
+
+Ctrl+a+k    # Kills a window you are in
+
+# screen can divide a terminal screen up into multiple regions
+Ctrl+a+S    # Divides a window into regions horizontally
+Ctrl+a+|    # Divides a window into regions vertically
+Ctrl+a+Tab  # Move between regions
+# You can create a new or move to already existing window inside region
+# Use already mentioned commands to do so
+
+Ctrl+a+X    # Terminates a region you are in
+Ctrl+a+Q    # Terminates all regions except current
+# Terminating a region does not terminate its associated window.
+
+# windows and regions exist inside a session
+screen -ls  # Lists sessions with their PID, name and status
+screen -list # Does the same
+
+screen -S "[name]"                      # Creates a new session with given name
+screen -S [session PID/name] -X quit    # Kills a session
+# You will be sent back to your terminal prompt outside of screen
+
+screen -r [session PID/name]            # Ataches/enters deatached session
+screen -r                               # Can be used if there is single session
+
+# To copy/paste in GNU Screen you enter scrollback mode:
+Ctrl+a+[                                # Enters scrollback mode
+# Move to the beginning of the piece of text you want to copy and mark it by pressing SPACE
+# Move to the end of the piece of text you want to copy and press SPACE again
+Ctrl+a+]                                # Pastes what you copied
+
+# The system-wide configuration file for screen is /etc/screenrc.
+# Alternatively, a user-level ~/.screenrc can be used.
+
+
+# tmux
+
+tmux                                    # Invoke tmux, first window and session are created
+tmux ls                                 # Lists sessions
+tmux new -s "[name]" -n "[window name]" # Creates new session and window with specified names
+
+Ctrl+b                                  # tmux prefix
+Ctrl+b+c                                # Create new window
+Ctrl+b+,                                # Renames a window
+
+Ctrl+b+w                                # Lists windows, select to switch
+Ctrl+b+n                                # Switches to the next window
+Ctrl+b+p                                # Switches to the previous window
+Ctrl+b+[number]                         # Switches to the specified window
+
+Ctrl+b+&                                # Kills a window
+
+Ctrl+b+f                                # Finds window by name
+Ctrl+b+.                                # Changes window's index number
+
+# Panes are complete pseudo-terminals linked to a window.
+# This means that killing a pane will also kill its pseudo-terminal and any associated programs running within
+Ctrl+b+"                                # Splits a window horizontally
+Ctrl+b+%                                # Splits a window vertically
+
+Ctrl+b+x                                # Destroys a current window
+Ctrl+b+↑,↓,←,→                          # Move between panes
+Ctrl+b+;                                # Move to the last active pane
+Ctrl+b+Ctrl+↑,↓                         # Resizes by one line
+Ctrl+b+Alt+↑,↓                          # Resizes by five lines
+Ctrl+b+{                                # Swaps panes (current with previous)
+Ctrl+b+}                                # Swaps panes (current with next)
+Ctrl+b+z                                # Zoom in/out pane
+
+Ctrl+b+t                                # Fancy clock inside pane (press q to kill)
+Ctrl+b+!                                # Turn the pane into a window
+
+tmux ls                                 # Lists sessions
+Ctrl+b+s                                # Lists sessions, select to switch sessions
+Ctrl+b +type ':new' in terminal         # Create new session
+Ctrl+b+$                                # Renames a session
+tmux kill-session -t [session-name]     # Kills a session
+# If you type the command from within the current session, you will be taken out of tmux
+
+tmux attach -t [session name]           # Attaches/enters a session
+tmux at [session name]                  # Attaches/enters a session
+tmux a [session name]                   # Attaches/enters a session
+tmux a                                  # If there is a single session, session name not needed
+
+tmux attach -d -t [session name]        # Dettaches session from any other terminal and attaches a session
+
+Ctrl+b+D                                # Select client to detach
+Ctrl+b+r                                # Refreshes client's terminal
+
+# To copy/paste in tmux you enter scrollback mode:
+Ctrl+a+[                                # Enters scrollback mode
+# Move to the beginning of the piece of text you want to copy and mark it by pressing Ctrl+SPACE
+# Move to the end of the piece of text you want to copy and press Alt+w
+Ctrl+a+]                                # Pastes what you copied
+
+# The configuration files for tmux are typically located at /etc/tmux.conf and ~/.tmux.conf. 
 ```
