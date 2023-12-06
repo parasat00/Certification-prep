@@ -848,7 +848,7 @@ Ctrl+b+.                                # Changes window's index number
 
 # Panes are complete pseudo-terminals linked to a window.
 # This means that killing a pane will also kill its pseudo-terminal and any associated programs running within
-Ctrl+b+"                                # Splits a window horizontally
+Ctrl+b+"                                # Splits a window horizontally"
 Ctrl+b+%                                # Splits a window vertically
 
 Ctrl+b+x                                # Destroys a current window
@@ -874,6 +874,8 @@ tmux attach -t [session name]           # Attaches/enters a session
 tmux at [session name]                  # Attaches/enters a session
 tmux a [session name]                   # Attaches/enters a session
 tmux a                                  # If there is a single session, session name not needed
+
+Ctrl+b+d                                # Detaches from a session
 
 tmux attach -d -t [session name]        # Dettaches session from any other terminal and attaches a session
 
