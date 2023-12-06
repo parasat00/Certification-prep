@@ -811,6 +811,8 @@ screen -S "[name]"                      # Creates a new session with given name
 screen -S [session PID/name] -X quit    # Kills a session
 # You will be sent back to your terminal prompt outside of screen
 
+Ctrl+a+d                                # Detaches a session
+
 screen -r [session PID/name]            # Ataches/enters deatached session
 screen -r                               # Can be used if there is single session
 
