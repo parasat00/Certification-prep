@@ -890,3 +890,49 @@ Ctrl+a+]                                # Pastes what you copied
 
 # The configuration files for tmux are typically located at /etc/tmux.conf and ~/.tmux.conf. 
 ```
+### Modify process execution priorities
+Weight: 2
+
+Every process has two predicates that intervene on its scheduling: the scheduling policy and the scheduling priority.
+
+There are two main types of scheduling policies: real-time policies and normal policies. Processes under a real-time policy are scheduled by their priority values directly. 
+If a more important process becomes ready to run, a less important running process is preempted and the higher priority process takes control of the CPU. A lower priority process will gain CPU control only if higher priority processes are idle or waiting for hardware response.
+
+Any real-time process has higher priority than a normal process. 
+As a general purpose operating system, Linux runs just a few real-time processes. Most processes, including system and user programs, run under normal scheduling policies. 
+Normal processes usually have the same priority value, but normal policies can define execution priority rules using another process predicate: the nice value.
+
+ Real-time processes have static priorities from 0 to 99 [0,99]
+ Normal proccesses have static priorities from 100 to 139 [100, 139]
+
+!!! Lower values mean higher priority
+
+Every normal process begins with a default nice value of 0 (priority 120)
+Nice numbers range from -20 (less nice, high priority) to 19 (more nice, low priority). 
+
+```bash
+grep ^prio /proc/[PID]/sched      # Displays static priority of an active process
+
+# To see the priorities of all running process run either of theses commands:
+ps -Al
+ps -el
+# To find actual priority of the process: Add 40 to it. (+40)
+
+# Alternatively you can use top command
+top
+# In top command all proccesses' priorities are substracted by 100
+# all priorities -100 --> real-time priorities: negative or rt; normal priorities: 0 to 39
+
+# Every normal process begins with a default nice value of 0 (priority 120)
+# To start a process with a non-standard priority:
+nice -n 15 [command]              # Process starts with nice value of 15
+# If -n is not present nice command changes the niceness to 10 by default
+
+renice [new nice value] -p [PID]  # Change the priority of a running process
+renice +[val] -g [group]          # Add val niceness to all processes owned by specific group
+renice +[val] -u [user]           # Add val niceness to all processes owned by specific user
+
+# Besides renice, the priority of processes can be modified with other programs, like the program top.
+# Enter top, press "r", type the PID of process and then enter the new nice value
+
+```
