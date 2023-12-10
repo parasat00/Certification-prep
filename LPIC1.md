@@ -939,35 +939,21 @@ renice +[val] -u [user]           # Add val niceness to all processes owned by s
 ### Search text files using regular expressions
 Weight: 3
 
-. (dot)		--Atom matches with any character.
-
-^ (caret)		--Atom matches with the beginning of a line.
-
-$ (dollar sign)	--Atom matches the end of a line.
-
-[ab]              --Match any single character from the list(a or b)
-
-[0-9] or [a-z]    --Match any single character from the range
-
-[^ab]             --Matches none of the characters/Excludes
-
-(*)               --Previous character appears zero or more times
-
-(+)               --Previous character appears one or more times
-
-?                 --Previous character appears zero or one time
-
-{i}               --Previous character appears exactly i times
-
-{i,}              --Previous character appears at least i times
-
-{,i}              --Previous character appears at most i times
-
-{i,j}             --Previous character appears i to j times
-
-i|j               --Matches i or j
-
-()                --For grouping
+- . (dot)		--Atom matches with any character.
+- ^ (caret)		--Atom matches with the beginning of a line.
+- $ (dollar sign)	--Atom matches the end of a line.
+- [ab]              --Match any single character from the list(a or b)
+- [0-9] or [a-z]    --Match any single character from the range
+- [^ab]             --Matches none of the characters/Excludes
+- (*)               --Previous character appears zero or more times
+- (+)               --Previous character appears one or more times
+- ?                 --Previous character appears zero or one time
+- {i}               --Previous character appears exactly i times
+- {i,}              --Previous character appears at least i times
+- {,i}              --Previous character appears at most i times
+- {i,j}             --Previous character appears i to j times
+- i|j               --Matches i or j
+- ()                --For grouping
 
 **grep** is a pattern finder and **sed** is a stream editor. They are useful by themselves, but it is when working together with other processes that they stand out
 
