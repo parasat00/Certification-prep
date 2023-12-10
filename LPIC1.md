@@ -980,4 +980,27 @@ grep -z [string] [file]          # takes the input or output as a sequence of li
 # The program fgrep is equivalent to grep -F, it does not parse regular expressions
 egrep                            # can use extended regular expressions
 fgrep                            # simple searches, matches a literal expression, it does not parse regular expressions
+
+
+# Stream editor sed (previews without changing the file)
+sed 's/[first word]/[second word]/g' [file]    # Swaps (s) every occurence of first word with the second word
+                                               # g means globally, at every line at every occurence
+sed -i 's/[first word]/[second word]/g' [file] # Swaps every first word with second word and saves output to original file
+sed -i.backup 's/[first word]/[second word]/g' [file] # Swaps every first word with second word and saves output to file with name
+                                                                                              # (original file name + .backup )
+
+sed [n]d [file]                    # Prints every line except n-th line (d-delete)
+sed [n],[m]d [file]                # Prints every line except lines from n to m (range)
+
+# More than one instruction can be used in the same execution, separated by semicolons. F.e.:
+sed "[n],[m]d;[x]d" [file]         # Prints every line exept lines from n to m and x-th line
+
+sed "/[regex]/c [text]" [file]     # Replaces the matching line with the given text
+sed "/[regex]/a [text]" [file]     # Inserts the given text to the next line after the matching line
+sed "/[regex]/r [source]" [file]   # Inserts the content of the source file to next line(s) after the matching line
+sed "/[regex]/w [dest]" [file]     # Overwrites destination file with the matching lines
+
+
+sed -n /[word]/p [file]            # Lists only the lines containing the word (-n means dont print unless; p - print)
+sed /[word]/d [file]               # Lists every line not containing word (d--delete)
 ```
