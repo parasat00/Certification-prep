@@ -979,6 +979,7 @@ grep -z [string] [file]          # takes the input or output as a sequence of li
 # The program egrep is equivalent to the command grep -E
 # The program fgrep is equivalent to grep -F, it does not parse regular expressions
 egrep                            # can use extended regular expressions
+egrep -o [regex] [file]          # displays only the parts of a text stream that match the expression
 fgrep                            # simple searches, matches a literal expression, it does not parse regular expressions
 
 
