@@ -1007,3 +1007,12 @@ sed /[word]/d [file]               # Lists every line not containing word (d--de
 sed -r ...                         # Enables to use extended regular expressions(-r)
 sed 's/[word]/[some command]/e'... # e at the end of the expression tells sed to replace matches with the output of command
 ```
+
+### Basic File Editing
+Weight: 3
+**VI**
+```bash
+vi [file]            # Opens file in vi editor
+vi +[n] [file]       # Opens file in vi editor, cursor at the n-th line
+vi + [file]          # Opens file in vi editor, cursor at the last line (by default)
+```
