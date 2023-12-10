@@ -956,4 +956,28 @@ Weight: 3
 - ()                --For grouping
 
 **grep** is a pattern finder and **sed** is a stream editor. They are useful by themselves, but it is when working together with other processes that they stand out
+```bash
+grep [string] [file]             # searches for appearances of string inside file(case sensitive)
+grep -i [string] [file]          # searches for string but case insensitive
+grep -r [string] [dir]           # searches for string recursively inside given directory
+grep -v [string] [file]          # prints everything that doesn't contain given string
+grep -w [string] [file]          # command searches for appearance of the whole word 
+grep -c [string] [file]          # only displays the total count for how many times a match occurs
 
+grep -[number] [string] [file]   # includes [number] lines before and [number] lines after when it finds a line with a match
+grep -C [number] [string] [file] # does the same
+grep -A [number] [string] [file] # prints [number] lines that was after the line with specified string
+grep -B [number] [string] [file] # prints [number] lines that was before the line with specified string
+
+grep -f [regex file] [file]      # f indicates a file containing the regular expression to use
+grep -n [string] [file]          # displays how many lines in the output (matched lines)
+grep -H [string] [file]          # print also the name of the file containing the line
+grep -z [string] [file]          # takes the input or output as a sequence of lines
+# usually used in combination with the output from the find command using its -print0 option
+
+# There are two complementary programs to grep: egrep and fgrep.
+# The program egrep is equivalent to the command grep -E
+# The program fgrep is equivalent to grep -F, it does not parse regular expressions
+egrep                            # can use extended regular expressions
+fgrep                            # simple searches, matches a literal expression, it does not parse regular expressions
+```
