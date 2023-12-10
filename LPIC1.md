@@ -939,7 +939,7 @@ renice +[val] -u [user]           # Add val niceness to all processes owned by s
 ### Search text files using regular expressions
 Weight: 3
 
-. (dot)		--Atom matches with any character.
+. (dot)		--Atom matches with any character.\n
 ^ (caret)		--Atom matches with the beginning of a line.
 $ (dollar sign)	--Atom matches the end of a line.
 
