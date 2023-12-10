@@ -1004,4 +1004,6 @@ sed "/[regex]/w [dest]" [file]     # Overwrites destination file with the matchi
 
 sed -n /[word]/p [file]            # Lists only the lines containing the word (-n means dont print unless; p - print)
 sed /[word]/d [file]               # Lists every line not containing word (d--delete)
+sed -r ...                         # Enables to use extended regular expressions(-r)
+sed 's/[word]/[some command]/e'... # e at the end of the expression tells sed to replace matches with the output of command
 ```
