@@ -1010,9 +1010,73 @@ sed 's/[word]/[some command]/e'... # e at the end of the expression tells sed to
 
 ### Basic File Editing
 Weight: 3
-**VI**
+#### **VI**
+#### Normal/Command mode
+is the default mode when we open vi editor
+Common and basic commands:
+- i, I		Enter the insert mode before the current cursor position and at the beginning of the current line
+- d, dd           Cut the selection or entire line
+- 0, $		Go to the beginning and end of the line.
+- 1G, G		Go to the beginning and end of the document.
+- (, )		Go to the beginning and end of the sentence.
+- {, }		Go to the beginning and end of the paragraph.
+- w, W		Jump word and jump word including punctuation.
+- h, j, k, l	Left, down, up, right.
+- e or E		Go to the end of the current word.
+- /, ?		Search forward and backwards.
+- a, A		Enter the insert mode after the current cursor position and at the end of the current line.
+- o, O		Add a new line and enter the insert mode in the next line or in the previous line.
+- s, S		Erase the character under the cursor or the entire line and enter the insert mode.
+- c      		Change the character(s) under the cursor.
+- r		      Replace the character under the cursor.
+- x	      	Delete the selected characters or the character under the cursor.
+- v, V		Start a new selection with the current character or the entire line.
+- y, yy		Copy (yanks) the character(s) or the entire line.
+- p, P		Paste copied content, after or before the current position.
+- u      		Undo the last action.
+- Ctrl-R		Redo the last action.
+- ZZ      		Close and save.
+- ZQ      		Close and do not save.
+
+vi can organize copied text in registers, allowing to keep distinct contents at the same time. 
+A register is specified by a character preceded by " and once created it’s kept until the end of the current session.
+We chose l as our character for register
+- Select a word or line you want to copy to register
+- type "ly (creates a register containing the selected word(s))
+- type "lp to paste
+
+Any key sequence can be recorded as a macro for future execution. For example, to surround a selected text in double-quotes.
+- Select a word or line you want to copy to register
+- press q and any character of your choice, macro will be associated with this character (f.e. d; we press qa and @d will appear in the footer line, indicating that the recording is on)
+- Type commands you want to record
+- press q again to end the recording
+- Now commands you recorded will be executed everytime you type @d(character you chose) in command mode
 ```bash
 vi [file]            # Opens file in vi editor
 vi +[n] [file]       # Opens file in vi editor, cursor at the n-th line
 vi + [file]          # Opens file in vi editor, cursor at the last line (by default)
+
+:s/REGEX/TEXT/g      # Works the same as command sed, swaps matched text with TEXT
+:q or :quit		   # Exit the program.
+:quit! or :q!        # Exit the program without saving.
+:wq			   # Save and exit.
+:exit or :x or :e	   # Save and exit, if needed.
+:visual		   # Go back to command mode(same effect-- : and press Enter)
 ```
+#### Nano
+A simpler alternative to vi is GNU nano
+- Ctrl-6 or Meta-A      Start a new selection. It’s also possible to create a selection by pressing Shift and moving the cursor.
+- Meta-6      		Copy the current selection.
+- Ctrl-K      		Cut the current selection.
+- Ctrl-U	      	Paste copied content.
+- Meta-U      	      Undo.
+- Meta-E	            Redo.
+- Ctrl-\		      Replace the text at the selection.
+- Ctrl-T      		Start a spell-checking session for the document or current selection.
+
+Emacs is another very popular text editor for the shell environment. Emacs includes many features that make it more than just a text editor. It is also an IDE (integrated development environment) capable of compiling, running, and testing programs. Emacs can be configured as an email, news or RSS client, making it an authentic productivity suite.
+
+Bash uses the session variables VISUAL or EDITOR to find out the default text editor for the shell environment. 
+For example, the command **export EDITOR=nano** defines nano as the default text editor in the current shell session. 
+To make this change persistent across sessions, the command should be included in **~/.bash_profile**.
+
