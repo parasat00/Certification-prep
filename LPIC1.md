@@ -1014,28 +1014,28 @@ Weight: 3
 #### Normal/Command mode
 is the default mode when we open vi editor
 Common and basic commands:
-- i, I		Enter the insert mode before the current cursor position and at the beginning of the current line
-- d, dd           Cut the selection or entire line
-- 0, $		Go to the beginning and end of the line.
-- 1G, G		Go to the beginning and end of the document.
-- (, )		Go to the beginning and end of the sentence.
-- {, }		Go to the beginning and end of the paragraph.
-- w, W		Jump word and jump word including punctuation.
-- h, j, k, l	Left, down, up, right.
-- e or E		Go to the end of the current word.
-- /, ?		Search forward and backwards.
-- a, A		Enter the insert mode after the current cursor position and at the end of the current line.
-- o, O		Add a new line and enter the insert mode in the next line or in the previous line.
-- s, S		Erase the character under the cursor or the entire line and enter the insert mode.
-- c      		Change the character(s) under the cursor.
-- r		      Replace the character under the cursor.
-- x	      	Delete the selected characters or the character under the cursor.
-- v, V		Start a new selection with the current character or the entire line.
-- y, yy		Copy (yanks) the character(s) or the entire line.
-- p, P		Paste copied content, after or before the current position.
-- u      		Undo the last action.
-- Ctrl-R		Redo the last action.
-- ZZ      		Close and save.
+- i, I		--Enter the insert mode before the current cursor position and at the beginning of the current line
+- d, dd           --Cut the selection or entire line
+- 0, $		--Go to the beginning and end of the line.
+- 1G, G		--Go to the beginning and end of the document.
+- (, )		--Go to the beginning and end of the sentence.
+- {, }		--Go to the beginning and end of the paragraph.
+- w, W		--Jump word and jump word including punctuation.
+- h, j, k, l	--Left, down, up, right.
+- e or E		--Go to the end of the current word.
+- /, ?		--Search forward and backwards.
+- a, A		--Enter the insert mode after the current cursor position and at the end of the current line.
+- o, O		--Add a new line and enter the insert mode in the next line or in the previous line.
+- s, S		--Erase the character under the cursor or the entire line and enter the insert mode.
+- c      		--Change the character(s) under the cursor.
+- r		      --Replace the character under the cursor.
+- x	      	--Delete the selected characters or the character under the cursor.
+- v, V		--Start a new selection with the current character or the entire line.
+- y, yy		--Copy (yanks) the character(s) or the entire line.
+- p, P		--Paste copied content, after or before the current position.
+- u      		--Undo the last action.
+- Ctrl-R		--Redo the last action.
+- ZZ      		--Close and save.
 - ZQ      		Close and do not save.
 
 vi can organize copied text in registers, allowing to keep distinct contents at the same time. 
