@@ -1080,3 +1080,55 @@ Bash uses the session variables VISUAL or EDITOR to find out the default text ed
 For example, the command **export EDITOR=nano** defines nano as the default text editor in the current shell session. 
 To make this change persistent across sessions, the command should be included in **~/.bash_profile**.
 
+### 104.1 Create partitions and filesystems
+Weight:  2
+
+All disk-related operations in this lesson need to be done as the user **root** (the system administrator), or with root privileges using **sudo**.
+
+There are two main ways of storing partition information on hard disks:
+* MBR
+  - The partition table is stored on the first sector of a disk, called the Boot Sector, along with a GRUB boot loader.
+  - Limit on disk size: 2TB
+  - 4 primary partitions per disk
+    On an MBR disk, you can have 2 main types of partitions, primary and extended. primary and extended partitions are treated exactly in the same way, so there are no “advantages” of using one over the other. extended partition acts as a container for logical partitions. You could have, for example, a primary partition, an extended partition occupying the remainder of the disk space and five logical partitions inside it.
+
+
+* GUID
+  - There is no practical limit on disk size.
+  - The maximum number of partitions are limited only by the operating system itself. 
+  - It is more commonly found on more modern machines that use UEFI instead of the old PC BIOS.
+  Unlike MBR disks, when creating a partition on GPT disks the size is not limited by the maximum amount of contiguous unallocated space. You can use every last bit of a free sector, no matter where it is located on the disk.
+
+The standard utility for managing MBR partitions on Linux is **fdisk**.
+The utility **gdisk** is the equivalent of fdisk when dealing with GPT partitioned disks. I
+```bash
+fdisk [device]        # To edit the partition table of the device f.e: fdisk /dev/sda
+
+# You can create, edit or delete partitions at will, but nothing will be written to disk unless you use the write (w) command.
+w                     # Writes the changes to disk (changes are saved)
+q                     # Quit/discard changes
+p                     # Prints current partition table
+n                     # Creates a partition at the start of unallocated space on the disk.
+F                     # Displays free/unallocated space on the disk
+d [parttion's number] # Deletes a partition
+d                     # Deletes a partition, works if there is only one partition on the disk
+t [parttion's number] # Changes type of the partition, partition type must be specified by its corresponding hexadecimal code
+l                     # Lists all the valid codes, F.e. Linux partitions are type 83 (Linux), swap partitions are type 82 (Linux Swap).
+
+gdisk [device]        # To edit the GUID partition table of the device f.e: gdisk /dev/sda
+p                     # Prints current partition table, also prints free space so no need to use F command
+n                     # Creates a partition, also need to specify partition type
+l                     # Lists all the valid codes
+d [parttion's number] # Deletes a partition
+# Unlike fdisk, the first partition will not be automatically selected if it is the only one on the disk
+s                     # Sorts/reorders disks,partitions. Useful when partition is deleted and numbers need to be reordered
+
+r                     # Accesses recovery task menu
+      b               # Rebuild a corrupt main GPT header
+      c               # Rebuild a corrupt main GPT partition table
+      d               # Use the main header to rebuild a backup
+      e               # Use the table to rebuild a backup
+      f               # Convert a MBR to a GPT
+      g               # Convert a GPT to a MBR
+      ?               # Lists available recovery commands in recovery mode
+```
