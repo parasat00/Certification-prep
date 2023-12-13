@@ -1119,7 +1119,7 @@ gdisk [device]        # To edit the GUID partition table of the device f.e: gdis
 p                     # Prints current partition table, also prints free space so no need to use F command
 n                     # Creates a partition, also need to specify partition type
 l                     # Lists all the valid codes
-d [parttion's number] # Deletes a partition
+d [parttion's number] # Deletes a partition'
 # Unlike fdisk, the first partition will not be automatically selected if it is the only one on the disk
 s                     # Sorts/reorders disks,partitions. Useful when partition is deleted and numbers need to be reordered
 
@@ -1131,4 +1131,22 @@ r                     # Accesses recovery task menu
       f               # Convert a MBR to a GPT
       g               # Convert a GPT to a MBR
       ?               # Lists available recovery commands in recovery mode
+
+# The Extended Filesystem (ext) was the first filesystem for Linux
+# The utilities mkfs.ext2, mkfs.ext3 and mkfs.ext4 are used to create ext2, ext3 and ext4 filesystems.
+mkfs.ext4 [device]      # Creates ext4 file system. f.e.: mkfs.ext4 /dev/sdb1
+mke2fs -t ext4 [device] # Does the same
+
+# mke2fs parameters. All of them also apply to mkfs.ext2, mkfs.ext3 and mkfs.ext4:
+      -b [size]         # Sets the size of the data blocks
+      -c                # Check the target device for bad blocks before creating the filesystem.
+      -c -c             # Much slower check
+      -d [directory]    # Copies the contents of the directory to the root of the new filesystem
+      -F                # Will force mke2fs to create a filesystem (dangerous)
+      -L [volume_label] # Will set the volume label. The label must be at most 16 characters long.
+      -n                # Simulates the creation of the filesystem
+      -q                # Quiet mode. mke2fs will not produce any output to the terminal.
+      -U [id]           # Sets the UUID (Universally Unique Identifier) of a partition
+      -V                # Verbose
+      
 ```
