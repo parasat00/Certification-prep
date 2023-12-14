@@ -1148,5 +1148,104 @@ mke2fs -t ext4 [device] # Does the same
       -q                # Quiet mode. mke2fs will not produce any output to the terminal.
       -U [id]           # Sets the UUID (Universally Unique Identifier) of a partition
       -V                # Verbose
-      
+
+
+# XFS is a high-performance file system, due to its performance and reliability features,
+# it is commonly used for servers and other environments that require high (or guaranteed) filesystem bandwidth
+mkfs.xfs [device]       # Creates xfs file system. f.e.: mkfs.xfs /dev/sdb1
+
+# As in mke2fs, mkfs.xfs supports a number of command line options:
+      -b size=[value]   # Sets the block size on the filesystem, in bytes
+      -m crc=[value]    # m-metadata option, crc-checks to verify the integrity of all metadata on the disk, value can be 1 or 0
+      -m uuid=value     # Sets the UUID of a partition
+      -f                # Force the creation of a filesystem on the target device even if a filesystem is detected on it
+      -l logdev=[device]# This will put the log section of the filesystem on the specified device, instead of inside the data section.
+      -l size=[size]    # Sets the size of the log section
+      -q                # Quiet mode
+      -L [label]        # Sets the label for filesystem. At most 12 characters
+      -N                # Simulates the creation of the filesystem
+
+# The FAT filesystem originated from MS-DOS, and through the years has received many revisions.
+# The FAT32 format released in 1996 with Windows 95 OSR2.
+
+# VFAT is an extension of the FAT16 format with support for long (up to 255 characters) file names.
+# Both filesystems are handled by the same utility, mkfs.fat. mkfs.vfat is an alias to it.
+
+mkfs.fat [device]       # Creates file system. f.e.: mkfs.fat /dev/sdb1
+      -c                # Checks the target device for bad blocks before creating the filesystem
+      -C [file] [blocks]# Creates the file and then create a FAT filesystem inside it, effectively creating an empty “disk image”
+      # “disk image” can be later written to a device using a utility such as dd or mounted as a loopback device
+      -F [size]         # Selects the size of the FAT (File Allocation Table), between 12, 16 or 32 versions
+      # If not specified, mkfs.fat will select the appropriate option based on the filesystem size.
+      -n [name]         # Sets the volume label, or name, for the filesystem. Can be up to 11 characters long, and the default is no name
+      -v                # Verbose
+# mkfs.fat cannot create a “bootable” filesystem. According to the manual page, “this isn’t as easy as you might think” and will not be implemented.
+
+# exFAT is a filesystem created by Microsoft in 2006 that addresses one of the most important limitations of FAT32: file and disk size.
+# On exFAT, the maximum file size is 16 exabytes (from 4 GB on FAT32), and the maximum disk size is 128 petabytes.
+
+mkfs.exfat [device]     # Creates file system. f.e.: mkfs.exfat /dev/sdb1
+      -i [volume id]    # Sets the Volume ID. This is a 32-Bit hexadecimal number. If not defined, an ID based on the current time is set.
+      -n [name]         # Sets the volume label, or name, for the filesystem. Can be up to 15 characters long, and the default is no name
+      -p [sector]       # Specifies the first sector of the first partition on the disk. This is an optional value, and the default is zero.
+      -s [sectors]      # Defines the number of physical sectors per cluster of allocation. This must be a power of two, like 1, 2, 4, 8, and so on.
+
+# Btrfs Filesystem
+# There are many features that make Btrfs attractive on modern systems where massive amounts of storage are common.
+mkfs.btrfs [device]     # Creates btrfs file system. f.e.: mkfs.btrfs /dev/sdb
+      -L                # Sets a label (or name) for your filesystem. Can have up to 256 characters, except for newlines
+      -m [parameter]    # Specifies how metadata will be distributed in the disk array
+      # Valid parameters are raid0, raid1, raid5, raid6, raid10, single and dup
+
+# Subvolumes are like filesystems inside filesystems. Think of them as a directory which can be mounted as (and treated like) a separate filesystem.
+btrfs subvolume create [filesystem]         # Creates subvolume
+btrfs subvolume show [filesystem]           # Shows info about subvolume
+
+# Snapshots are just like subvolumes, but pre-populated with the contents from the volume from which the snapshot was taken.
+btrfs subvolume snapshot [origin] [copy]    # Creates a snapshot of the Btrfs filesystem mounted in [origin] directory inside [copy] directory
+btrfs subvolume snapshot -r [origin] [copy] # Creates a read-only snapshot of the Btrfs filesystem 
+
+
+# GNU Parted is a very powerful partition editor (hence the name) that can be used to create, delete, move, resize, rescue and copy partitions.
+# It can work with both GPT and MBR disks, and cover almost all of your disk management needs.
+
+# Unlike fdisk and gdisk, parted makes changes to the disk immediately after the command is issued, without waiting for another command to write the changes to disk.
+
+parted [device]      # The program starts an interactive command line interface like fdisk and gdisk with a (parted) prompt for you to enter commands
+# F.e: parted /dev/sda
+# Be careful! If you do not specify a device, parted will automatically select the primary disk (usually /dev/sda) to work with.
+
+select [device]      # To switch to a different disk than the one specified on the command line
+
+print                # Prints information about the currently selected partition
+print devices        # Lists all block devices connected to your system
+print all            # Prints information about all connected devices
+print free           # Prints how much free space there is
+
+mklabel [msdos/gpt]  # Creates a partition table on an Empty disk. msdos for MBR, gpt for GPT
+
+mkpart [parttype] [fstype] [start] [end] # Creates a partition
+      [parttype]     # Partition type, can be primary or extended if MBR is selected
+      [fstype]       # Specifies which filesystem will be used on this partition.
+      [start]        # Specifies the exact point on the device where the partition begins
+      [end]          # Specifies the end of the partition.
+                     # Note that this is not the size of the partition, this is the point on the disk where it ends.
+# Example of mkpart:
+mkpart primary ext4 1m 100m
+
+rm [number]          # Removes a partition. Partition number you can get from print command
+rescue [start] [end] # Recovers deleted partition. Using its previous start and end points
+# rescue can only recover partitions that have a filesystem installed on them. Empty partitions are not detected
+
+# Resizing partitions
+# During resizing the partition must be unused and unmounted.
+# You need enough free space after the partition to grow it to the size you want.
+resizepart [number] [size] # Changes given partition's size
+resize2fs [device] [size]  # Changes size of the filesystem
+# If you omit the size parameter, it will use all of the available space of the partition.
+# Before resizing, it is advised to unmount the partition.
+resize2fs -M [device]      # Adjusts the size of the filesystem so it is just big enough for the files on it
+
+# Pay attention when shrinking partitions. You must shrink the filesystem first and then partition
+# If you get the order of things wrong, you will lose data!
 ```
