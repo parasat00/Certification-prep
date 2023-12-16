@@ -1249,3 +1249,108 @@ resize2fs -M [device]      # Adjusts the size of the filesystem so it is just bi
 # Pay attention when shrinking partitions. You must shrink the filesystem first and then partition
 # If you get the order of things wrong, you will lose data!
 ```
+
+### 104.2 Maintain the integrity of filesystems
+Weight: 2
+
+In this lesson, we will discuss the tools available to monitor filesystem usage, optimize its operation and how to check and repair damage
+```bash
+du       # To check how much space is being used and how much is left on a current directory and all its subdirectories
+du -h    # Human readable du (in megabytes)
+du -ah   # Shows individual usage of all the files in a directory
+du -Sh   # Shows usage of subdirectories and current directory without its subdirectories
+du -Shc  # The same command + shows a grand total at the end
+du -h -d1 # (d)Deep 1 level. Shows usage of current directory and its subdirectories (not subdirectories of subdirectory)
+du -ah --exclude=[pattern] # Excludes files whose name matches the pattern
+
+# du works at files level. df works at filesystem level
+df             # Provides a list of all of the available (already mounted) filesystems on your system
+df -h          # Human readable df (in megabytes)
+df -i          # Shows used/available inodes instead of blocks
+df -T          # Prints types of filesystem
+df -t [type]   # Print only filesystems of the given type
+df -x [type]   # Exclude filesystems of the given type
+df --output=[parameter] # Customizes what should be displayed on output
+# source--filesystem, fstype--type of filesystem, size, used--space used, avail--available space. pcent--percent of usage, target--where fs mounted
+# itotal--total number of indoes, iused--number of inodes used, iavail--number of available inodes, ipcent--percentage of used inodes
+# F.e:
+      df -h --output=target,source,fstype,pcent,itotal,iused
+
+fsck [device]              # Filesystem check for ext2, ext3 and ext4 (f.e. device=/dev/sdb1)
+# NEVER run fsck (or related utilities) on a mounted filesystem. If this is done anyway, data may be lost.
+
+fsck -t [fs] [device]      # Specifies filesystem on a device, F.e: fsck -t vfat /dev/sdb1
+fsck.msdos [device]        # Calls filesystem specific utility. Alternative for previous command
+
+# Command-line arguments for fsck:
+# -A  --Checks all filesystems listed in /etc/fstab
+# -C  --Displays progress bar (works only for ext2/3/4)
+# -N  --Simulation, prints what would be done without actually checking it
+# -AR --Skips checking of the root filesystem
+# -V  --Verbose
+
+# The specific utility for ext2, ext3 and ext4 filesystems is e2fsck, also called fsck.ext2, fsck.ext3 and fsck.ext4 (those three are merely links to e2fsck).
+# When a filesystem error is found, fsck stops and asks the user what to do.
+# The user must type y to fix the problem, n to leave it unfixed or a to fix the current problem and all subsequent ones.
+# Options for e2fsck to run in non-interactive mode:
+# -f	Forces e2fsck to check a filesystem even if it is marked as “clean”, i.e. has been correctly unmounted
+# -y	This will answer y (yes) to all questions.
+# -n	Answers n (no) to all questions, this will cause the filesystem to be mounted read-only, so it cannot be modified
+# -p	Attempts to automatically fix any errors found. If an error that requires intervention from the system administrator is found,
+      # e2fsck will provide a description of the problem and exit.
+
+# tune2fs --utility used to display and change parameters of ext filesystems
+tune2fs -l [device]                  # Displays current parameters for the given device (f.e device=/dev/sdb1)
+tune2fs -c [number] [device]         # Sets maximum mount count
+tune2fs -C [number] [device]         # Sets the number of times system has been mounted
+# Number of times system has been mounted increases each time fs is mounted. If it reaches maximum mount count fsck will run on next boot
+
+tune2fs -i [number][letter] [device] # Sets time interval between checks. 
+# F.e: tune2fs -i 10d /dev/sdb1 will check fs at next reboot every 10 days (d-days, m-months, y-years)
+tune2fs -i 0 [device]                # Disables the feature
+
+tune2fs -L [label] [device]          # Sets label for fs. Up to 16 characters long
+tune2fs -U [uuid] [device]           # Sets uuid for device
+# Both the label and UUID can be used instead of the device name (like /dev/sda1) to mount the filesystem.
+tune2fs -e [behaviour] [device]      # Sets the kernel behavior when a filesystem error is found. Possible behaviours:
+      # continue      --Will continue execution normally.
+      # remount-ro    --Will remount the filesystem as read-only.
+      # panic	    --Will cause a kernel panic.
+
+# The default behavior is to continue.
+# remount-ro might be useful in data-sensitive applications, as it will immediately stop writes to the disk, avoiding more potential errors.
+
+# ext3 filesystems are basically ext2 filesystems with a journal.
+tune2fs -j [device]                  # Adds journal to ext2 fs converting it to ext3
+# Afterwards, when mounting the converted filesystem, do not forget to set the type to ext3 so the journal can be used.
+
+# -J allows you to use extra parameters to set some journal options
+tune2fs -J size=[size] [device]      # Sets the journal size in megabytes
+tune2fs -J location=[loc] [device]   # Sets where journal should be stored(suffix for specific block M, specific position on the disk G)
+tune2fs -J device=[loc] [device]     # Puts journal on external device
+# Multiple parameters can be set at once using comma as delimeter:
+tune2fs -J size=10,location=100M,device=/dev/sdb1 /dev/sdc1
+
+tune2fs -f                           # Forcefully completes opertaion. Can be DANGEROUS
+
+
+# For XFS filesystems, the equivalent of fsck is xfs_repair
+xfs_repair -n [device]               # Checks filesystem (n stands for no modify)
+xfs_repair [device]                  # Checks and repairs 
+
+# Command line options for xfs_repair:
+      # -l [log dev] and -r [real-time dev] --if fs has external log and real time seactions
+      # -m [n] --limits memory usage of xfs_repair to n megabytes. Can be useful on server settings
+      # By default xfs_repair will scale its memory usage as needed, up to 75% of the system’s physical RAM
+      # -d --will enable the repair of the filesystems that are mounted read-only
+      # -v --Verbose. -v -v  --more verbose
+
+# xfs_repair is unable to repair filesystems with a “dirty” log. You can “zero out” a corrupt log with the -L parameter
+# This is a last resort as it may result in filesystem corruption and data loss.
+
+# xfs_db is a utility to debug a filesystem. Mostly used to inspect various elements and parameters of the filesystem.F.e.:
+xfs_db /dev/sdc1
+
+# xfs_fsr is utility to reorganize(defragment) a XFS file system. When executed without any extra arguments >>>
+# it will run for two hours and try to defragment all mounted, writable XFS filesystems listed on the /etc/mtab/ file.
+```
