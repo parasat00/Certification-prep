@@ -1354,3 +1354,117 @@ xfs_db /dev/sdc1
 # xfs_fsr is utility to reorganize(defragment) a XFS file system. When executed without any extra arguments >>>
 # it will run for two hours and try to defragment all mounted, writable XFS filesystems listed on the /etc/mtab/ file.
 ```
+
+### 104.3 Control mounting and unmounting of filesystems
+Weight: 3
+
+Before a filesystem can be accessed on Linux, it needs to be mounted.
+Mounting -attaching the filesystem to a specific point in your system’s directory tree, called a mount point. Filesystems can be mounted manually or automatically and there are many ways to do this.
+```bash
+mount -t [type] [device] [mountpoint]      # Manually mounts a filesystem
+      # [type] -type of filesystem to mount(f.e ext4, xfat, btrfs);  [device] -name of the partition containing filesystem(f.e: /dev/sdb1)
+      # [mountpoint] -where filesystem will be mounted; Example of a command: mount -t exfat /dev/sdc1 ~/flash/
+
+# label and UUID are specified when the filesystem is created and will not change, unless the filesystem is destroyed or manually assigned a new label or UUID.
+lsblk -f [device]          # Queries information about a filesystem and find out the label and UUID associated with it
+
+mount -t [type] UUID=[uuid] [mountpoint]   # Manually mounts a filesystem with the uuid of fs
+mount -t [type] LABEL=[label] [mountpoint] # Manually mounts a filesystem with the label of fs
+
+mount                      # Lists filesystems currently mounted on your system
+mount -t [type]            # Prints only filesystems of the given type
+mount -t [type],[type]     # The same operation can be used to filter output for multiple types
+# The output of these command will be in this format: [source] on [target] type [type] [options]
+# [source] -partition containing fs; [target] -directory where its mounted; [options] -options passed to mount command
+
+# Command line parameters that can be used with mount:
+      # -a                  mounts all filesystems listed in the file /etc/fstab
+      # -o (or options)     passes a list of comma-separated mount options to the mount command, which can change how the filesystem will be mounted
+      # -r (-ro)            mounts filesystem as read only
+      # -w (-rw)            mounts filesystem as writable
+
+umount [device/mountpoint] # Unmounts a filesystem (device name or mountpoint can be used)
+      # umount /dev/sdc1
+      # umount ~/flash/    # Both do the same thus interchangable
+
+# Some of the command line parameters to umount are:
+      # -a                  unmounts all filesystems in /etc/fstab
+      # -f                  forceful unmount. Useful when unmounting a remote fs that became unreachable
+      # -r                  if the filesystem cannot be unmounted, it will try to make it read only
+
+# When unmounting a filesystem, you may encounter an error message stating that the target is busy.
+# This will happen if any files on the filesystem are open.
+lsof [device]              # lists processes accessing files of this filesystem and which files are open
+
+# Traditionally, /mnt was the directory under which all external devices would be mounted
+# This has been superseded by /media, which is now the default mount point for any user-removable media like
+# external disks, USB flash drives, memory card readers, etc. connected to the system.
+# On most modern Linux distributions and desktop environments, removable devices are automatically mounted under /media/[user]/[label]
+
+# That being said, whenever you need to manually mount a filesystem, it is good practice to mount it under /mnt
+
+
+# The text file /etc/fstab contains descriptions about the filesystems that can be mounted. Each line in the file follows this order:
+# [filesystem] [mountpoint] [type] [options] [dump] [pass]
+      # [filesystem]       device (f.e. /dev/sdc1) containing fs to be mounted. Instead of device you can specify UUID or label
+      # [mountpoint]       where the filesystem will be mounted
+      # [type]             type of fs
+      # [options]          options to pass during mount
+      # [dump]             usually zero, meaning to ignore, indicates whether any ext2, ext3 or ext4 filesystems should be considered for backup
+      # [pass]             usually zero, if not zero, defines the order in which the filesystems will be checked on bootup
+
+# options are a comma-separated list of parameters. Some of the options that are common for many filesystems:
+      # atime and noatime  ---by default, access time is updated every time file is read, disabling it (noatime) can speed up disk I/O
+      # auto and noauto    ---Whether the filesystem can be mounted automatically by mount -a command or not
+      # dev and nodev      ---Whether character and block devices in the mounted fs should be interpreted or not
+      # exec and noexec    ---Grant or deny permission to execute binaries on the file system
+      # user and nouser    ---Allow (or not) ordinary user to mount the filesystem
+      # group              ---Allows user to mount the fs if user belongs to the group owning the device that contain fs
+      # owner              ---Allows user to mount the fs if user owns the device containing fs
+      # suid and nosuid    ---Allows (or not) SETUID and SETGUID to take effect
+      # ro and rw          ---Mount filesystem as read only or writable
+      # remount            ---This will attempt to remount an already mounted filesystem. This is not used on /etc/fstab, but as a parameter to mount -o.
+      # sync and async     ---Whether to do all I/O operations to the filesystem synchronously or asynchronously. async is usually the default.
+      # defaults           ---Passes the default options: rw, suid, dev, exec, auto, nouser and async
+
+# To mount a disk with systemd you need to create a mount unit inside /etc/systemd/system directory
+# Mount units are simple text files with the .mount extension. The basic format will be like this:
+      [Unit]
+      Description=External data disk           # Short description of the mount unit
+
+      [Mount]
+      What=/dev/disk/by-uuid/56C11DCC5D2E1334  # What should be mounted
+      Where=/mnt/external                      # Full path to where the volume should be mounted
+      Type=ntfs                                # Type of fs
+      Options=defaults                         # Mount options
+
+      [Install]
+      WantedBy=multi-user.target               # Used for dependency management.
+      # Means that whenever the system boots into a multi-user environment (a normal boot) the unit will be mounted
+
+# To work correctly, the mount unit must have the same name as the mount point.
+# In this case, the mount point is /mnt/external, so the file should be named mnt-external.mount.
+
+# After that, you need to restart the systemd daemon and start the unit
+systemctl daemon-reload
+systemctl start mnt-external.mount
+# Now the contents of the external disk should be available on /mnt/external.
+
+
+# Mount units can be automounted whenever the mount point is accessed.
+# To do this, you need an .automount file, alongside the .mount file describing the unit.
+# The basic format for .automount:
+      [Unit]
+      Description=Automount for external data disk   # Short description of the mount unit
+
+      [Automount]
+      Where=/mnt/external                            # Full path to where the volume should be mounted
+
+      [Install]
+      WantedBy=multi-user.target                     # Used for dependency management.
+# Save the file with the same name as the mount point (in this case, mnt-external.automount),
+# reload systemd and start the unit:
+systemctl daemon-reload
+systemctl start mnt-external.automount
+
+```
