@@ -1543,7 +1543,7 @@ user who owns a file does not need to belong to the group who owns a file
       chown [user]: [file/dir]             # Modifies only user owning a file/directory
       chown [user] [file/dir]              # Does the same as previous
 
-      chgr [group] [file/dir]              # Changes group of a file/directory      
+      chgrp [group] [file/dir]             # Changes group of a file/directory      
 ```
 
 Querying Groups
