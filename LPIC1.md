@@ -1466,5 +1466,110 @@ systemctl start mnt-external.mount
 # reload systemd and start the unit:
 systemctl daemon-reload
 systemctl start mnt-external.automount
-
 ```
+
+### 104.5 Manage file permissions and ownership
+Weight: 3
+
+Every file on disk is owned by a user and a user group and has three sets of permissions: one for its owner, one for the group who owns the file and one for everyone else.
+
+```bash
+$ ls -l
+drwxrwxr-x 2 carol carol   4096 Dec 10 15:57 Another_Directory
+```
++ The first column on the listing shows the file type and permissions. For example, on drwxrwxr-x
+      - The first character, d, indicates the file type.
+      - The next three characters, rwx, indicate the permissions for the owner of the file, also referred to as user(**u**)
+      - The next three characters, rwx, indicate the permissions of the group owning the file, also referred to as **g**
+      - The last three characters, r-x, indicate the permissions for anyone else, also known as others or **o**
++ The second column indicates the number of hard links pointing to that file
++ The third and fourth columns show ownership information: the user and group that own the file.
++ The fifth column shows the file size
++ The sixth column shows the date and time the file was last modified
++ The seventh and last column shows the file name.
+
+Common filetypes:
+* - (normal file)
+* d (directory)
+* l (symbolic link)
+* b (block device)
+* c (character device)
+* s (socket)
+
+!!! Do not alter any of the permissions on block devices, character devices or sockets, unless you know what you are doing. This may prevent your system from working!
+
+```bash
+ls -ld [directory]            # Shows information about the directory(not content)
+```
+
+Permissions:
+* r      --Stands for read and has an octal value of 4. Permission to open a file and read its contents. For directories: permission to read the directory’s contents, like filenames. But it does not imply permission to read the files themselves.
+* w      --Stands for write and has an octal value of 2. Permission to edit or delete a file. For directories: this means permission to create or delete files in a directory.
+* x      --Stands for execute and has an octal value of 1. This means that the file can be run as an executable or script. For directories: permission to enter a directory, but not to list its files (for that r is needed).
+
+First the system checks if the current user owns the file, and if this is true it applies the first set of permissions only. Otherwise, it checks if the current user belongs to the group owning the file. In that case, it applies the second set of permissions only. In any other case, the system will apply the third set of permissions.
+
+```bash
+chmod [permission] [file]      # change permissions of the file
+```
+Only the owner of the file, or the system administrator (root) can change the permissions on a file
+
+Modify file permissions:
+* Symbolic Mode
+      + --grants permission, - --revokes permission, = --sets to a specific value
+      ```bash
+        chmod g+w [file]      # grants permission to write(change) a file for group owners
+        chmod u-r [file]      # revokes read permission from owner
+        chmod a=rw- [file]    # grants all users exactly read, write and no execution permission
+        chmod u+rw,o-x        # modifies multiple permissions at the same time
+      ```
+* Octal Mode
+      ```bash
+        # r-4      w-2      x-1       F.e: rwx = 4+2+1=7
+        chmod 660 [file]      # modifies file permisssion, equivalent to: u=rw-,g=rw-,o=
+        chmod 751 [file]      # equivalent to: u=rwx,g=r-x,o=--x
+      ```
+```bash
+chmod -R u+rwx [file]         # modifies permissions for all files inside a directory and its subdirectories
+```
+
+Modifying file ownership
+
+Unless you are the system administrator (root), you cannot change ownership of a file to another user or group you do not belong to.
+user who owns a file does not need to belong to the group who owns a file
+```bash
+      chown [user]:[group] [file/dir]      # Modifies ownership of a file or directory
+      chown :[group] [file/dir]            # Modifies only group owning a file/directory
+      chown [user]: [file/dir]             # Modifies only user owning a file/directory
+      chown [user] [file/dir]              # Does the same as previous
+
+      chgr [group] [file/dir]              # Changes group of a file/directory      
+```
+
+Querying Groups
+
+```bash
+      getent group                         # Lists groups that exist on a system
+      groups [user]                        # Lists groups a user belongs to
+      groupmems -g [group] -l              # Lists users in a given group
+```
+
+Default Permissions
+
+They come from the user mask or **umask**, which sets the default permissions for every file created.
+```bash
+      umask                                # Displays default permissions
+      umask -S                             # Displays default permissions in symbolic mode
+      umask u=rwx,g=rwx,o=                 # Modifies default permissions for current shell session
+      # Every new directory will inherit the permissions rwxrwx---, and every file rw-rw---- (as they do not get execute permissions)
+```
+| Value | Permission for Files | Permission for Directories |
+| :---: | :------------------: | :------------------------: |
+|   0   |   rw-                |  rwx                       |
+|   1   |   rw-                |  rw-                       |
+|   2   |   r--                |  r-x                       |
+|   3   |   r--                |  r--                       |
+|   4   |   -w-                |  -wx                       |
+|   5   |   -w-                |  -w-                       |
+|   6   |   ---                |  --x                       |
+|   7   |   ---                |  ---                       |
