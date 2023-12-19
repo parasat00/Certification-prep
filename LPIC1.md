@@ -1512,23 +1512,25 @@ First the system checks if the current user owns the file, and if this is true i
 ```bash
 chmod [permission] [file]      # change permissions of the file
 ```
+
 Only the owner of the file, or the system administrator (root) can change the permissions on a file
 
 Modify file permissions:
 * Symbolic Mode
-      + --grants permission, - --revokes permission, = --sets to a specific value
-      ```bash
-        chmod g+w [file]      # grants permission to write(change) a file for group owners
-        chmod u-r [file]      # revokes read permission from owner
-        chmod a=rw- [file]    # grants all users exactly read, write and no execution permission
-        chmod u+rw,o-x        # modifies multiple permissions at the same time
-      ```
+
++ --grants permission, - --revokes permission, = --sets to a specific value
+```bash
+  chmod g+w [file]      # grants permission to write(change) a file for group owners
+  chmod u-r [file]      # revokes read permission from owner
+  chmod a=rw- [file]    # grants all users exactly read, write and no execution permission
+  chmod u+rw,o-x        # modifies multiple permissions at the same time
+```
 * Octal Mode
-      ```bash
-        # r-4      w-2      x-1       F.e: rwx = 4+2+1=7
-        chmod 660 [file]      # modifies file permisssion, equivalent to: u=rw-,g=rw-,o=
-        chmod 751 [file]      # equivalent to: u=rwx,g=r-x,o=--x
-      ```
+```bash
+  # r-4      w-2      x-1       F.e: rwx = 4+2+1=7
+  chmod 660 [file]      # modifies file permisssion, equivalent to: u=rw-,g=rw-,o=
+  chmod 751 [file]      # equivalent to: u=rwx,g=r-x,o=--x
+```
 ```bash
 chmod -R u+rwx [file]         # modifies permissions for all files inside a directory and its subdirectories
 ```
@@ -1557,6 +1559,7 @@ Querying Groups
 Default Permissions
 
 They come from the user mask or **umask**, which sets the default permissions for every file created.
+
 ```bash
       umask                                # Displays default permissions
       umask -S                             # Displays default permissions in symbolic mode
