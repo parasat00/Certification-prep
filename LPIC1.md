@@ -1577,20 +1577,23 @@ They come from the user mask or **umask**, which sets the default permissions fo
 Special Permissions
 
 Besides the read, write and execute permissions for user, group and others, each file can have three other special permissions which can alter the way a directory works or how a program runs. 
-      Sticky Bit
++ Sticky Bit
       The sticky bit, also called the restricted deletion flag, has the octal value 1 and in symbolic mode is represented by a **t** within the other’s permissions.
       **This applies only to directories**, and has no effect on normal files. **On Linux it prevents users from removing or renaming a file in a directory unless they own that file or directory**
       Directories with the sticky bit set show a t replacing the x on the permissions for others on the output of ls -l
+      
       ```bash
       chmod 1755 Another_Directory         # Sets sticky bit
       ls -ld Another_Directory
       drwxr-xr-t 2 carol carol 4,0K Dec 20 18:46 Another_Directory
       ```
-      Set GID
+      
++ Set GID
       Set GID, also known as SGID or Set Group ID bit, has the octal value 2 and in symbolic mode is represented by an **s** on the group permissions.
       This can be applied to executable files or directories. 
       When applied to directories, it will make every file or directory created under it inherit the group from the parent directory.
       Files and directories with SGID bit show an s replacing the x on the permissions for the group on the output of ls -l:
+      
       ```bash
       cd Sample_Directory/
       touch newfile
@@ -1605,13 +1608,18 @@ Besides the read, write and execute permissions for user, group and others, each
       -rw-r--r-- 1 carol users 0 Jan 18 17:20 emptyfile      
       # SGID bit made the file inherit the group owner of its parent directory, which is users
       ```
-      Set UID
-      SUID, also known as Set User ID, has the octal value 4 and is represented by an **s** on the user permissions in symbolic mode. It only applies to files and has no effect on directories. Its behavior is similar to the SGID bit, but the process will run with the privileges of the user who owns the file. Files with the SUID bit show a s replacing the x on the  permissions for the user on the output of ls -l:
+      
++ Set UID
+      SUID, also known as Set User ID, has the octal value 4 and is represented by an **s** on the user permissions in symbolic mode.
+      It only applies to files and has no effect on directories. Its behavior is similar to the SGID bit, but the process will run with the privileges of the user who owns the file.            Files with the SUID bit show a s replacing the x on the  permissions for the user on the output of ls -l:
+      
       ```bash
       ls -ld test.sh
       -rwsr-xr-x 1 carol carol 33 Dec 11 10:36 test.sh
       ```
-      You can combine multiple special permissions on one parameter. So, to set SGID (value 2) and SUID (value 4) in octal mode for the script test.sh with permissions 755, you would type:
+      
+  You can combine multiple special permissions on one parameter. So, to set SGID (value 2) and SUID (value 4) in octal mode for the script test.sh with permissions 755, you would type:
+      
       ```bash
       chmod 6755 test.sh
       ls -lh test.sh
