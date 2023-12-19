@@ -1640,8 +1640,10 @@ Links are special kind of file. There are two types of links
   - they point to the path of another file
   - If you delete the target file the link will still exist, but it stops working
   - If you delete the link, the target file will still exist
-  - You can create soft links to files and directories
-  - The target file and link can be located at different filesystems
+  - **You can create soft links to files and directories**
+  - **The target file and link can be located at different filesystems**
+  - Inherits the same access permissions as the target file
+  - Does not increase the link count of a file
 
 ```bash
 ln -s [target] [link]      # creates symbolic link to target file
@@ -1662,8 +1664,10 @@ lrwxrwxrwx 1 carol carol   12 Jun  7 19:23 softlink -> original.txt
   - Hard links are treated as regular files, meaning you can delete, move and rename them
   - If you change the content of one of the hard links, the contents of all other hard links pointing to that file change since all these names point to the very same data
   - If you delete one of the hard links, the others will still work. If you delete the last hard link the content will be gone.
-  - You can create hard links to files only
-  - Both the target and link must be located in the same filesystem
+  - **You can create hard links to files only**
+  - **Both the target and link must be located in the same filesystem**
+  - Inherits the same access permissions as the target file
+  - Increases the link count of a file
 
 ```bash
 ln [target] [link]         # creates a hard link to the target file
