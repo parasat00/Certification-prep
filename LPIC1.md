@@ -1631,3 +1631,50 @@ chmod 6755 test.sh
 ls -lh test.sh
 -rwsr-sr-x 1 carol carol 66 Jan 18 17:29 test.sh
 ```
+
+### 104.6 Create and change hard and symbolic links
+Weight: 2
+
+Links are special kind of file. There are two types of links
++ Symbolic links (also called soft links)
+  - they point to the path of another file
+  - If you delete the target file the link will still exist, but it stops working
+  - If you delete the link, the target file will still exist
+  - You can create soft links to files and directories
+  - The target file and link can be located at different filesystems
+
+```bash
+ln -s [target] [link]      # creates symbolic link to target file
+ln -s [target]             # creates symbolic link with the same name as target file inside current directory
+# the target file must exist already
+# the path to the target file should be absolute. This way you will avoid errors when moving the link or the target file.
+
+ls -lh
+-r--r--r-- 1 carol carol 110K Jun  7 10:13 original.txt
+lrwxrwxrwx 1 carol carol   12 Jun  7 19:23 softlink -> original.txt
+# the first character on the permissions for the file softlink is l, indicating a symbolic link
+# you can see that the link points to target file, which is original.txt
+```
++ Hard link
+  - are an additional entry in the file system pointing to the same place (inode) on the disk
+  - Like a second name for the original file. They are not duplicates.
+  - All such names are equal and can be used to refer to a file.
+  - Hard links are treated as regular files, meaning you can delete, move and rename them
+  - If you change the content of one of the hard links, the contents of all other hard links pointing to that file change since all these names point to the very same data
+  - If you delete one of the hard links, the others will still work. If you delete the last hard link the content will be gone.
+  - You can create hard links to files only
+  - Both the target and link must be located in the same filesystem
+
+```bash
+ln [target] [link]         # creates a hard link to the target file
+ln [target]                # creates a hard link with the same name as the target file inside current directory
+# the target file must exist already
+# the path to the target file should be absolute. This way you will avoid errors when moving the link or the target file.
+
+ls -li
+3806696 -r--r--r-- 2 carol carol 111702 Jun  7 10:13 hardlink
+3806696 -r--r--r-- 2 carol carol 111702 Jun  7 10:13 target.txt
+# The number before the permissions is the inode number. Both the file hardlink and the file target.txt have the same inode
+# Because one is a hard link to the other. Eventhough one is original and other is link, practically they are the same
+# By default, every file has a link count of 1 (directories have a count of 2), and every hard link to it increases the count by one
+```
