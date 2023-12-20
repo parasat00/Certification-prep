@@ -1682,3 +1682,8 @@ ls -li
 # Because one is a hard link to the other. Eventhough one is original and other is link, practically they are the same
 # By default, every file has a link count of 1 (directories have a count of 2), and every hard link to it increases the count by one
 ```
+
+104.7 Find system files and place files in the correct location
+Weight:  2
+
+Linux distributions come in all shapes and sizes, but one thing that almost all of them share is that they follow the Filesystem Hierarchy Standard (FHS), which defines a “standard layout” for the filesystem, making interoperation and system administration much easier.
