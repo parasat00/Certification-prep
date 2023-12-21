@@ -1683,7 +1683,70 @@ ls -li
 # By default, every file has a link count of 1 (directories have a count of 2), and every hard link to it increases the count by one
 ```
 
-104.7 Find system files and place files in the correct location
+### 104.7 Find system files and place files in the correct location
 Weight:  2
 
-Linux distributions come in all shapes and sizes, but one thing that almost all of them share is that they follow the Filesystem Hierarchy Standard (FHS), which defines a “standard layout” for the filesystem, making interoperation and system administration much easier.
+Linux distributions come in all shapes and sizes, but one thing that almost all of them share is that they follow the **Filesystem Hierarchy Standard (FHS)**, which defines a “standard layout” for the filesystem, making interoperation and system administration much easier.
+
+Compliance with the standard is not mandatory, but most distributions follow it.
+
+Basic directory structure according to FHS:
++ /          This is the root directory, the topmost directory in the hierarchy. Every other directory is located inside it.
++ /bin       Essential binaries, available for all users
++ /boot      Files needed by boot proccess, including the initial RAM disk(initrd) and linux kernel itself
++ /dev       Device files, they can be physical devices connected to the system or virtual provided by kernel
++ /etc       Host specific configuration files, programs may create subdirectories under /etc to store configuration files
++ /home      Every user has own home directory to store personal files, e.g. /home/[user].
++ /root      Home directory for root user
++ /lib       Shared libraries needed to boot the operating system and needed to run binaries under /bin and /sbin
++ /media     User-mountable removable media are mounted under here
++ /mnt       Mount point for temporary mounted filesystems
++ /opt       Application software packages
++ /run       Runtime variable data
++ /sbin      System binaries
++ /srv       Data served by system. F.e. the pages served by the web server could be stored under /srv/www
++ /tmp       Temporary files
++ /usr       Read-only user data, including data needed by secondary utilities and applications
++ /proc      Virtual filesystem containing data related to running processes
++ /var       Variable data written during system operation, including print queue, log data, mailboxes, temporary files, browser cache, etc.
+
+Temporary files:
++ /tmp      The recommendation is that this directory be cleared (all files erased) during system boot-up, although this is not mandatory.
++ /var/tmp  The directory should not be cleared during the system boot-up. Files stored here will usually persist between reboots.
++ /run      This directory contains run-time variable data used by running processes, such as process identifier files (.pid). Programs that need more than one run-time file may create subdirectories here. This location must be cleared during system boot-up. The purpose of this directory was once served by /var/run, and on some systems /var/run may be a symbolic link to /run.
+
+Finding files
+**find** is a command to search for a file in system
+```bash
+find [directory] -name [expression]               # Searches by name for matched files inside given directory, F.e:
+      find . -name '*.jpg'                        # Searches for jpg files in the current directory
+find [directory] -iname [expression]              # Case-insensitive search by name inside given directory, F.e:
+      find . -iname '*.jpg'                       # Searches for jpg files as well as JPG files
+
+find [directory] -name [expression] -maxdepth n   # Searches for file in the current directory and (n-1) levels down, F.e.:
+      find . -iname '*.jpg' -maxdepth 1           # Searches for file only in the current directory
+      find . -iname '*.jpg' -maxdepth 2           # Searches for file in the current directory and its subdirectories (1 lvl down)
+find [directory] -name [expression] -mindepth n   # Searches for file starting from n the level down
+
+find [directory] -name [expression] -mount        # Searches for files, doesnt search inside mounted filesystem
+
+find [directory] -fstype [type] -name [expression] # Searches for files, inside only filesystems of given type, F.e.:
+      find /mnt -fstype exfat -iname "*report*"   # Searches inside exfat filesystems mounted under /mnt
+
+# Searching for attributes:
+-user [user]      # Matches files owned by given user
+-group [group]    # Matches files owned by given group
+-readable         # Displays files that are readable by current user
+-writable         # Displays files that are writable by current user
+-executable       # Displays files that are executable and directories that can be entered by current user
+-perm XXXX        # Displays files that have exactly XXXX permissions. F.e:
+      find . -perm 0760       # Lists files with all permissions for owner, read and write permission for owner group and no permission for other users.
+      -perm -XXXX # Lists files that have at least XXXX permissions
+-empty            # Displays empty files and directories
+-size N           # Displays files of size N (k-kibibyte/1024bytes, M-mebibyte/1024*1024, G-gibibyte/1024*1024*1024 ), F.e.:
+      find . -size 10k  # Displays files of size 10kibibytes
+      find . -size +10M # Displays files of size greater than 10 mebibytes
+      find . -size -1G  # Displays files of size less than 1 gibibyes
+-amin N, cmin N, mmin N       # Displays files that has been accessed, changed or modified N minutes ago
+-atime N, ctime N, mtime N    # Displays files that has been accessed, changed or modified N days ago
+```
